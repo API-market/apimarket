@@ -1,4 +1,4 @@
-const { instrument, capability } = require('open-rights-exchange')
+const { instrument, capability, contract } = require('open-rights-exchange')
 
 exports.purchase = async (offerAddress, options) => {
   const { web3, ipfs, transactionParameters, cpuContractAddress } = options
@@ -10,6 +10,29 @@ exports.purchase = async (offerAddress, options) => {
   const voucher = await capability.perform(voucherCapability, {web3, ipfs, transactionParameters})
 
   return instrument.address(voucher)
+}
+
+const findVoucherAddress = (offerAddress, userAddress, web3) => {
+  const abi = contract.abi.instrumentFactory
+  const offer = web3.eth.contract(abi).at(offerAddress)
+
+  const eventFilter = offer.InstrumentCreated({
+    holder: userAddress
+  }, { fromBlock: 0 })
+
+  const events = await new Promise((resolve, reject) => {
+    eventFilter.get((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+
+  const event = events.slice(-1).pop()
+
+  return event.args.instrument
 }
 
 exports.load = async (offerAddress, userAddress, options) => {
