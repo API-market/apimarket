@@ -1,0 +1,19 @@
+{
+  "name": "aikon",
+  "version": "1.0.0",
+  "description": "This repository contains a library for interacting with the Aikon marketplace.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/api-market/aikon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/api-market/aikon/issues"
+  },
+  "homepage": "https://github.com/api-market/aikon#readme"
+}
