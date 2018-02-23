@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/api-market/aikon/issues"
   },
-  "homepage": "https://github.com/api-market/aikon#readme"
+  "homepage": "https://github.com/api-market/aikon#readme",
+  "dependencies": {
+    "open-rights-exchange": "github:api-market/protocol"
+  }
 }
