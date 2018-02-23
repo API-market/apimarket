@@ -12,7 +12,7 @@ exports.purchase = async (offerAddress, options) => {
   return instrument.address(voucher)
 }
 
-const findVoucherAddress = (offerAddress, userAddress, web3) => {
+const findVoucherAddress = async (offerAddress, userAddress, web3) => {
   const abi = contract.abi.instrumentFactory
   const offer = web3.eth.contract(abi).at(offerAddress)
 
