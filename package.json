@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/api-market/aikon#readme",
   "dependencies": {
-    "open-rights-exchange": "github:api-market/protocol"
+    "open-rights-exchange": "git+https://github.com/api-market/protocol.git"
   }
 }
