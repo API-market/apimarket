@@ -1,10 +1,10 @@
 {
   "name": "aikon",
   "version": "1.0.0",
-  "description": "This repository contains a library for interacting with the Aikon marketplace.",
-  "main": "index.js",
-  "browser": "dist/bundle.js",
+  "description": "This repository contains a library for interacting with the AIKON marketplace.",
+  "main": "./index.js",
   "scripts": {
+    "build": "browserify -r ./index.js:aikon > dist/bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/api-market/aikon#readme",
   "dependencies": {
-    "open-rights-exchange": "git+https://github.com/api-market/protocol.git"
+    "open-rights-exchange": "https://github.com/api-market/protocol.git"
   }
 }
