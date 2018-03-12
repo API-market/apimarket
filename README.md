@@ -17,12 +17,12 @@ An example configuration file looks like:
   "registry": {
     "io.hadron.deepspace": "0x..."
   },
-  services: {
-    web3: {
-      endpoint: "ganache1.api.market"
+  "services": {
+    "web3": {
+      "endpoint": "ganache1.api.market"
     },
-    ipfs: {
-      endpoint: "ipfs.api.market"
+    "ipfs": {
+      "endpoint": "ipfs.api.market"
     }
   }
 }
