@@ -64,10 +64,10 @@ With a similar key file and config, supply an Express-style HTTP handler that se
   },
   "services": {
     "web3": {
-      "endpoint": "ganache1.api.market"
+      "endpoint": "ganache1.api.market:8545"
     },
     "ipfs": {
-      "endpoint": "ipfs.api.market"
+      "endpoint": "ipfs.api.market:5001"
     }
   }
 }
@@ -82,11 +82,7 @@ const aikon = require('aikon')
 let configFilePath
 const config = JSON.parse(fs.readSync(configFilePath))
 
-let pathToKeyFile
-let password
-const keys = JSON.parse(fs.readSync(pathToKeyFile))
-
-const server = aikon.initServer(handler, keys, config)
+const server = aikon.initServer(handler, config)
 
 server.listen(port)
 ```
