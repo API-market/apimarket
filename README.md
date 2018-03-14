@@ -15,7 +15,11 @@ An example configuration file looks like:
 ```json
 {
   "registry": {
-    "io.hadron.deepspace": "0x..."
+    "io.hadron.deepspace": {
+      "voucher" : {
+        "address": "0x..."
+      }
+    }
   },
   "services": {
     "web3": {
@@ -37,11 +41,7 @@ const aikon = require('aikon')
 let configFilePath
 const config = JSON.parse(fs.readSync(configFilePath))
 
-let pathToKeyFile
-let password
-const keys = JSON.parse(fs.readSync(pathToKeyFile))
-
-const client = aikon.init(keys, config)
+const client = aikon.init(config)
 
 const result = await client.fetch("io.hadron.deepspace", hadronRequest)
 console.log(result)
@@ -50,6 +50,28 @@ console.log(result)
 ## Server
 
 With a similar key file and config, supply an Express-style HTTP handler that services your API.
+
+```json
+{
+  "registry": {
+    "io.hadron.deepspace": {
+      "endpoint": "https://...",
+      "offerAddress": "0x..."
+    }
+  },
+  "verifier": {
+    "publicKey": "<...>"
+  },
+  "services": {
+    "web3": {
+      "endpoint": "ganache1.api.market"
+    },
+    "ipfs": {
+      "endpoint": "ipfs.api.market"
+    }
+  }
+}
+```
 
 Only valid requests will be served and middleware in this library will handle the payments.
 
