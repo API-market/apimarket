@@ -1,5 +1,5 @@
-const client = require('lib/client')
-const server = require('lib/server')
+const client = require('./lib/client')
+const server = require('./lib/server')
 
 // this function is exposed so API providers can build their own server, injecting this middleware as appropriate
 exports.middlewareFor = server.middlewareFor
