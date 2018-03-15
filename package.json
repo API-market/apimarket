@@ -18,14 +18,20 @@
   },
   "homepage": "https://github.com/api-market/aikon#readme",
   "dependencies": {
+    "axios": "^0.16.2",
     "body-parser": "^1.18.2",
     "connect": "^3.6.6",
     "cookie-parse": "^0.4.0",
     "cookie-parser": "^1.4.3",
+    "ethereumjs-util": "^5.1.5",
     "express": "^4.16.3",
     "ipfs-api": "^18.1.2",
+    "ipfs-mini": "^1.1.2",
+    "keythereum": "^1.0.2",
     "morgan": "^1.9.0",
-    "open-rights-exchange": "https://github.com/api-market/protocol.git#master",
+    "open-rights-exchange": "git+https://github.com/api-market/protocol.git#master",
+    "payment-channel": "git+https://github.com/api-market/payment_channel.git#master",
+    "url-parse": "^1.2.0",
     "web3": "^0.20.6"
   }
 }
