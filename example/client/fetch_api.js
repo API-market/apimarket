@@ -1,5 +1,5 @@
 const fs = require('fs')
-const Client = require('./lib/client');
+const Client = require('../../lib/client');
 
 const pathToKeyFile = './example/key.json'
 const configFilePath = './example/config.json'
