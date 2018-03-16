@@ -5,6 +5,7 @@
   "main": "./index.js",
   "scripts": {
     "build": "browserify -r ./index.js:aikon > dist/bundle.js",
+    "example:server": "node --trace-warnings ./example/server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

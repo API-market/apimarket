@@ -7,7 +7,7 @@ const apiEndpoint = 'io.hadron.deepspace';
 
 process.env.CONTRACT_ADDRESS = '0xedec26295df8a61a29aece56e36e7e2bc1d65205' // payment channel contract
 
-;(async () => {
+(async () => {
   const config = JSON.parse(fs.readFileSync(configFilePath))
   const keys = JSON.parse(fs.readFileSync(pathToKeyFile))
 
