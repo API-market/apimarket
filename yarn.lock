@@ -1766,7 +1766,7 @@ once@^1.3.0, once@^1.3.1, once@^1.4.0:
 
 "open-rights-exchange@git+https://github.com/api-market/protocol.git#master":
   version "1.0.0"
-  resolved "git+https://github.com/api-market/protocol.git#41b1157bbcf6aefb81779f3a1df5f977de0997d1"
+  resolved "git+https://github.com/api-market/protocol.git#afc79547e3c2ad368bf7e56f4fda06877e3db9b5"
   dependencies:
     clean "^4.0.2"
     cookie-parser "^1.4.3"
@@ -1779,7 +1779,7 @@ once@^1.3.0, once@^1.3.1, once@^1.4.0:
     lodash "^4.17.4"
     multihashes "^0.4.13"
     node-fetch "^2.0.0"
-    payment-channel "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel#master"
+    payment-channel "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#master"
     truffle-contract "^3.0.1"
     url-parse "^1.2.0"
     web3 "^0.19.0"
@@ -1856,9 +1856,9 @@ path-type@^1.0.0:
     web3 "^0.19.0"
     whatwg-fetch "^2.0.3"
 
-"payment-channel@https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel#master":
+"payment-channel@https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#master":
   version "1.0.0"
-  resolved "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel#4995a3f6136f88c27b64a5e1b77328b9d8d8d536"
+  resolved "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#4995a3f6136f88c27b64a5e1b77328b9d8d8d536"
   dependencies:
     body-parser "^1.18.2"
     express "^4.16.2"

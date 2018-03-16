@@ -2,9 +2,11 @@ const { initServer } = require('../../index')
 
 const config = {
   "registry": {
-    "io.hadron.deepspace": {
+    "io.hadron.spaceTelescope": {
       "endpoint": 'https://us-central1-partner-hadron.cloudfunctions.net/hadron',
-      "offerAddress": "0xce1d230b5a2de622733168cba663cfb7716a2de2",
+      "offer": {
+        "address": '0xc9737c879b797c2a96482db3e842b985ccb5a9e0'
+      }
     }
   },
   "verifier": {
