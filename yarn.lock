@@ -333,7 +333,7 @@ chownr@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.0.1.tgz#e2a75042a9551908bebd25b8523d5f9769d79181"
 
-cids@^0.5.2, cids@~0.5.1, cids@~0.5.2:
+cids@^0.5.2, cids@~0.5.1, cids@~0.5.2, cids@~0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/cids/-/cids-0.5.3.tgz#9a25b697eb76faf807afcec35c4ab936edfbd0a4"
   dependencies:
@@ -699,6 +699,10 @@ expand-template@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-1.1.0.tgz#e09efba977bf98f9ee0ed25abd0c692e02aec3fc"
 
+express-async-handler@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/express-async-handler/-/express-async-handler-1.1.1.tgz#605327260ae84d7c3a5bc366831693568bb34a5c"
+
 express@^4.16.2, express@^4.16.3:
   version "4.16.3"
   resolved "https://registry.yarnpkg.com/express/-/express-4.16.3.tgz#6af8a502350db3246ecc4becf6b5a34d22f7ed53"
@@ -1026,14 +1030,14 @@ ipaddr.js@1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.6.0.tgz#e3fa357b773da619f26e95f049d055c72796f86b"
 
-ipfs-api@^18.1.2:
-  version "18.1.2"
-  resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-18.1.2.tgz#0928e17a2ab232d50b08ff89997325a126a09731"
+ipfs-api@^18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-18.2.0.tgz#10b3095509aa4ec121ba1b4a7e29edea4e61281d"
   dependencies:
     async "^2.6.0"
     big.js "^5.0.3"
     bs58 "^4.0.1"
-    cids "~0.5.2"
+    cids "~0.5.3"
     concat-stream "^1.6.1"
     detect-node "^2.0.3"
     flatmap "0.0.3"
@@ -1056,7 +1060,7 @@ ipfs-api@^18.1.2:
     pump "^3.0.0"
     qs "^6.5.1"
     readable-stream "^2.3.5"
-    stream-http "^2.8.0"
+    stream-http "^2.8.1"
     stream-to-pull-stream "^1.7.2"
     streamifier "^0.1.1"
     tar-stream "^1.5.5"
@@ -2466,7 +2470,7 @@ stealthy-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
 
-stream-http@^2.8.0:
+stream-http@^2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/stream-http/-/stream-http-2.8.1.tgz#d0441be1a457a73a733a8a7b53570bebd9ef66a4"
   dependencies:
