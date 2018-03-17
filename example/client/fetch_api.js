@@ -1,9 +1,9 @@
 const fs = require('fs')
 const Client = require('../../lib/client');
 
-const pathToKeyFile = './key.json'
-const configFilePath = './config.json'
-const apiEndpoint = 'io.hadron.deepspace';
+const pathToKeyFile = './example/key.json'
+const configFilePath = './example/config.json'
+const apiEndpoint = 'io.hadron.spaceTelescope';
 
 process.env.CONTRACT_ADDRESS = '0xedec26295df8a61a29aece56e36e7e2bc1d65205' // payment channel contract
 

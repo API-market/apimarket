@@ -43,7 +43,7 @@ const config = JSON.parse(fs.readSync(configFilePath))
 
 const client = aikon.init(config)
 
-const result = await client.fetch("io.hadron.deepspace", hadronRequest)
+const result = await client.fetch("io.hadron.spaceTelescope", hadronRequest)
 console.log(result)
 ```
 
