@@ -4,7 +4,7 @@
   "description": "This repository contains a library for interacting with the AIKON marketplace.",
   "main": "./index.js",
   "scripts": {
-    "build": "browserify -r ./index.js:aikon > dist/bundle.js",
+    "build": "babel . --ignore node_modules,example,dist --out-dir dist",
     "example:server": "node --trace-warnings ./example/server/index.js",
     "example:client": "node --trace-warnings ./example/client/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -36,5 +36,10 @@
     "payment-channel": "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#master",
     "url-parse": "^1.2.0",
     "web3": "^0.20.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.42",
+    "@babel/core": "^7.0.0-beta.42",
+    "@babel/preset-env": "^7.0.0-beta.42"
   }
 }
