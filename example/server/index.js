@@ -3,9 +3,9 @@ const { initServer } = require('../../index')
 const config = {
   "registry": {
     "io.hadron.spaceTelescope": {
-      "endpoint": 'https://us-central1-partner-hadron.cloudfunctions.net/hadron',
+      "endpoint": 'http://sandbox.dev.aikon.com:3405/',
       "offer": {
-        "address": '0xc9737c879b797c2a96482db3e842b985ccb5a9e0'
+        "address": '0x19f9591fbe24b596434aaad7c80884a863a56b0e'
       }
     }
   },
