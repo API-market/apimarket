@@ -1030,7 +1030,7 @@ ipaddr.js@1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.6.0.tgz#e3fa357b773da619f26e95f049d055c72796f86b"
 
-ipfs-api@^18.2.0:
+ipfs-api@^18.1.2, ipfs-api@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-18.2.0.tgz#10b3095509aa4ec121ba1b4a7e29edea4e61281d"
   dependencies:
@@ -1768,15 +1768,15 @@ once@^1.3.0, once@^1.3.1, once@^1.4.0:
   dependencies:
     wrappy "1"
 
-"open-rights-exchange@git+https://github.com/api-market/protocol.git#master":
+"open-rights-exchange@https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#master":
   version "1.0.0"
-  resolved "git+https://github.com/api-market/protocol.git#afc79547e3c2ad368bf7e56f4fda06877e3db9b5"
+  resolved "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#5cb64a75ffe17010120aa5fe43d2943064cafe0e"
   dependencies:
     clean "^4.0.2"
     cookie-parser "^1.4.3"
     elliptic "^6.4.0"
     ethereumjs-util "^5.1.4"
-    ipfs-mini "^1.1.2"
+    ipfs-api "^18.1.2"
     js-sha3 "^0.7.0"
     jsonwebtoken "^8.2.0"
     key-encoder "^1.1.6"
@@ -1844,21 +1844,6 @@ path-type@^1.0.0:
     graceful-fs "^4.1.2"
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
-
-"payment-channel@git+https://github.com/api-market/payment_channel.git#master":
-  version "1.0.0"
-  uid "4995a3f6136f88c27b64a5e1b77328b9d8d8d536"
-  resolved "git+https://github.com/api-market/payment_channel.git#4995a3f6136f88c27b64a5e1b77328b9d8d8d536"
-  dependencies:
-    body-parser "^1.18.2"
-    express "^4.16.2"
-    machinomy "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/machinomy#master"
-    node-fetch "^1.7.3"
-    request "^2.83.0"
-    truffle "^4.0.4"
-    truffle-contract "^3.0.4"
-    web3 "^0.19.0"
-    whatwg-fetch "^2.0.3"
 
 "payment-channel@https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#master":
   version "1.0.0"
