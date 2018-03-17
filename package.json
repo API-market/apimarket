@@ -6,6 +6,7 @@
   "scripts": {
     "build": "browserify -r ./index.js:aikon > dist/bundle.js",
     "example:server": "node --trace-warnings ./example/server/index.js",
+    "example:client": "node --trace-warnings ./example/client/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,12 +28,12 @@
     "ethereumjs-util": "^5.1.5",
     "express": "^4.16.3",
     "express-async-handler": "^1.1.1",
-    "ipfs-api": "^18.1.2",
+    "ipfs-api": "^18.2.0",
     "ipfs-mini": "^1.1.2",
     "keythereum": "^1.0.2",
     "morgan": "^1.9.0",
-    "open-rights-exchange": "git+https://github.com/api-market/protocol.git#master",
-    "payment-channel": "git+https://github.com/api-market/payment_channel.git#master",
+    "open-rights-exchange": "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#master",
+    "payment-channel": "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#master",
     "url-parse": "^1.2.0",
     "web3": "^0.20.6"
   }

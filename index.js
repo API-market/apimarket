@@ -7,3 +7,5 @@ exports.middlewareFor = asyncHandler(server.middlewareFor)
 
 // returns an express server ready to `listen` on a `port`
 exports.initServer = server.build
+
+exports.init = client.init
