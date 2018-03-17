@@ -5,7 +5,7 @@ const configFilePath = '/config.json'
 const config = JSON.parse(fs.readFileSync(__dirname + configFilePath))
 
 const registrySelector = 'io.hadron.spaceTelescope'
-const request = {"query":"{ DeepSpace(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
+const request = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
 
 const run = async () => {
   let client = await aikon.init(config)
