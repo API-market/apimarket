@@ -515,7 +515,7 @@
 
 "@machinomy/contracts@https://github.com/api-market/machinomy-contracts#master":
   version "4.0.1"
-  resolved "https://github.com/api-market/machinomy-contracts#560530dba29d975d18f3ebba3757f4c970177e23"
+  resolved "https://github.com/api-market/machinomy-contracts#b510ce7d3486063336f3f33425a1cabbe8d626c8"
   dependencies:
     bignumber.js "4.1.0"
     buffer "^5.0.7"
@@ -1778,8 +1778,8 @@ iconv-lite@0.4.19, iconv-lite@~0.4.13:
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
 
 ieee754@^1.1.4:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.8.tgz#be33d40ac10ef1926701f6f08a2d86fbfd1ad3e4"
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.10.tgz#719a6f7b026831e64bdb838b0de1bb0029bbf716"
 
 immediate@~3.0.5:
   version "3.0.6"
@@ -2558,11 +2558,7 @@ mute-stream@~0.0.4:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
-nan@^2.2.1:
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.9.2.tgz#f564d75f5f8f36a6d9456cca7a6c4fe488ab7866"
-
-nan@^2.3.0:
+nan@^2.2.1, nan@^2.3.0:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
 
@@ -2829,7 +2825,7 @@ path-type@^1.0.0:
 
 "payment-channel@https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#master":
   version "1.0.0"
-  resolved "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#4995a3f6136f88c27b64a5e1b77328b9d8d8d536"
+  resolved "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#d4f5d0ff9bdaa252ca3451999956d49a64703d94"
   dependencies:
     body-parser "^1.18.2"
     express "^4.16.2"
