@@ -1,5 +1,5 @@
 const fs = require('fs')
-const aikon = require('../../index');
+const apimarket = require('../../dist/index');
 
 const configFilePath = '/config.json'
 const config = JSON.parse(fs.readFileSync(__dirname + configFilePath))
@@ -8,7 +8,7 @@ const registrySelector = 'io.hadron.spaceTelescope'
 const request = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
 
 const run = async () => {
-  let client = await aikon.init(config)
+  let client = await apimarket.init(config)
 
   try {
     const response = await client.fetch(registrySelector, request)
