@@ -86,3 +86,10 @@ const server = aikon.initServer(handler, config)
 
 server.listen(port)
 ```
+
+# Publish NPM Package
+
+- Update version number in package.json
+- `npm publish`
+
+   package name will be: @apimarket/apimarket@{version}
