@@ -1,24 +1,25 @@
 {
-  "name": "aikon",
-  "version": "1.0.0",
+  "name": "@apimarket/apimarket",
+  "version": "0.5.2",
   "description": "This repository contains a library for interacting with the AIKON marketplace.",
-  "main": "./index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "build": "browserify -r ./index.js:aikon > dist/bundle.js",
+    "build": "babel . --ignore node_modules,example,dist --out-dir dist",
     "example:server": "node --trace-warnings ./example/server/index.js",
     "example:client": "node --trace-warnings ./example/client/index.js",
+    "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/api-market/aikon.git"
+    "url": "git+https://github.com/api-market/apimarket.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Aikon (www.aikon.com)",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/api-market/aikon/issues"
+    "url": "https://github.com/api-market/apimarket/issues"
   },
-  "homepage": "https://github.com/api-market/aikon#readme",
+  "homepage": "https://github.com/api-market/apimarket#readme",
   "dependencies": {
     "axios": "^0.16.2",
     "body-parser": "^1.18.2",
@@ -32,9 +33,14 @@
     "ipfs-mini": "^1.1.2",
     "keythereum": "^1.0.2",
     "morgan": "^1.9.0",
-    "open-rights-exchange": "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#master",
-    "payment-channel": "https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#master",
+    "open-rights-exchange": "git+https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#master",
+    "payment-channel": "git+https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#master",
     "url-parse": "^1.2.0",
     "web3": "^0.20.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.42",
+    "@babel/core": "^7.0.0-beta.42",
+    "@babel/preset-env": "^7.0.0-beta.42"
   }
 }
