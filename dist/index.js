@@ -1,3 +1,5 @@
+"use strict";
+
 const client = require('./lib/client');
 
 const server = require('./lib/server');
