@@ -1,8 +1,20 @@
 {
   "registry": {
     "io.hadron.spaceTelescope": {
-      "voucher": {
-        "address": "0x79edfd02a9d53421aac590d6fe2b58ef41c88fe4"
+      "http://sandbox.dev.aikon.com:3405/": {
+        "voucher": {
+          "address": "0x79edfd02a9d53421aac590d6fe2b58ef41c88fe4"
+        }
+      },
+      "https://us-central1-partner-hadron.cloudfunctions.net/hadron": {
+        "voucher": {
+          "address": "0xaa80239c3913cb6c44c897d7a5717344dfa74b0e"
+        }
+      },
+      "http://hadron1.dev.api.market/": {
+        "voucher": {
+          "address": "0x67426aea300e86beab8d7a45c15422f1592eaccf"
+        }
       }
     }
   },

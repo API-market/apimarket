@@ -1,9 +1,20 @@
 {
   "registry": {
     "io.hadron.spaceTelescope": {
-      "endpoint": "http://sandbox.dev.aikon.com:3405/",
-      "offer": {
-        "address": "0x19f9591fbe24b596434aaad7c80884a863a56b0e"
+      "http://sandbox.dev.aikon.com:3405/": {
+        "offer": {
+          "address": "0x19f9591fbe24b596434aaad7c80884a863a56b0e"
+        }
+      },
+      "https://us-central1-partner-hadron.cloudfunctions.net/hadron": {
+        "offer": {
+          "address": "0x06297cf977af3799f1d4b2533d63955fec874734"
+        }
+      },
+      "http://hadron1.dev.api.market/": {
+        "offer": {
+          "address": "0x81be046114921cf123e836192e403928ecb0bba0"
+        }
       }
     }
   },
