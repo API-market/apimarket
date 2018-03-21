@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 const fs = require('fs')
 const Client = require('../../lib/client');
 

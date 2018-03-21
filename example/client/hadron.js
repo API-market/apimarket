@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 const fs = require('fs')
 const http = require('http');
 const Client = require('../../lib/client');

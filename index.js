@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 const client = require('./lib/client')
 const server = require('./lib/server')
 const asyncHandler = require('express-async-handler')
