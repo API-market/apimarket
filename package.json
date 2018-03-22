@@ -4,7 +4,8 @@
   "description": "This repository contains a library for interacting with the AIKON marketplace.",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "babel . --ignore node_modules,dist --out-dir dist",
+    "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles",
+    "copyfiles": "cp ./example/client/config.json ./dist/example/client",
     "example:server": "node --trace-warnings ./dist/example/server/index.js",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",

@@ -1,6 +1,6 @@
 import '@babel/polyfill'
 const fs = require('fs')
-const apimarket = require('../../dist/index');
+const apimarket = require('../../index');
 
 const configFilePath = '/config.json'
 const config = JSON.parse(fs.readFileSync(__dirname + configFilePath))
