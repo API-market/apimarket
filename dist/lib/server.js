@@ -62,19 +62,16 @@ const connectWeb3 = ({
 };
 
 const ipfsAPI = require('ipfs-api');
-
-const {
-  URL
-} = require('url');
+const url = require('url');
 
 const connectIPFS = ({
   endpoint
 }) => {
-  const url = new URL(endpoint);
+  const ipfsUrl = url.parse(endpoint);
   const ipfs = ipfsAPI({
-    host: url.hostname,
-    port: url.port,
-    protocol: url.protocol.slice(0, -1)
+    host: ipfsUrl.hostname,
+    port: ipfsUrl.port,
+    protocol: ipfsUrl.protocol.slice(0, -1)
   });
   return ipfs;
 };
@@ -145,9 +142,10 @@ const buildServer = (endpoint, handler, ...middlewares) => {
 
   for (let middleware of middlewares) {
     app.use(middleware);
-  }
+  } //const path = new URL(endpoint).pathname
 
-  const path = new URL(endpoint).pathname;
+
+  const path = url.parse(endpoint).pathname;
   app.post(path, handler); // catch 404 and forward to error handler
 
   app.use(function (req, res, next) {
