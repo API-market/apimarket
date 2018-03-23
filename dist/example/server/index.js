@@ -18,31 +18,13 @@ const {
   initServer
 } = require('../../index');
 
-const config = {
-  "registry": {
-    "io.hadron.spaceTelescope": {
-      "endpoint": 'http://sandbox.dev.aikon.com:3405/',
-      "offer": {
-        "address": '0x19f9591fbe24b596434aaad7c80884a863a56b0e'
-      }
-    }
-  },
-  "verifier": {
-    "publicKey": `-----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfy0YUA2nDgEIbOC2FxE6wygiNFUd
-eH6vYfcHz+uioYq+GU81Axysh09GKhxsRu4OIK668BzCyw9DI/HDysTV2A==
------END PUBLIC KEY-----`
-  },
-  "services": {
-    "web3": {
-      "endpoint": "http://ganache1.api.market:8545"
-    },
-    "ipfs": {
-      "endpoint": "http://ipfs2-ext.dev.api.market:5001"
-    }
-  }
-};
-const port = process.env.PORT || 8080;
+const fs = require('fs');
+
+const configFilePath = '/config.json';
+const config = JSON.parse(fs.readFileSync(__dirname + configFilePath));
+const port = process.env.PORT || 8080; // in this example, we run a local server that is essentially a proxy, this name is used to select the right offer data, the remote endpoints are listed in the configuration
+
+const endpoint = "http://sandbox.dev.aikon.com:3405/";
 
 const handler =
 /*#__PURE__*/
@@ -61,14 +43,14 @@ function () {
 const run =
 /*#__PURE__*/
 function () {
-  var _ref2 = _asyncToGenerator(function* (port, handler, config) {
-    const server = yield initServer(handler, config);
+  var _ref2 = _asyncToGenerator(function* (endpoint, port, handler, config) {
+    const server = yield initServer(endpoint, handler, config);
     server.listen(port, () => console.log(`listening on port: ${port}`));
   });
 
-  return function run(_x3, _x4, _x5) {
+  return function run(_x3, _x4, _x5, _x6) {
     return _ref2.apply(this, arguments);
   };
 }();
 
-run(port, handler, config);
+run(endpoint, port, handler, config);

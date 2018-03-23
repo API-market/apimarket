@@ -30,9 +30,10 @@ const run =
 function () {
   var _ref = _asyncToGenerator(function* () {
     let client = yield apimarket.init(config);
+    let url = "http://sandbox.dev.aikon.com:3405/";
 
     try {
-      const response = yield client.fetch(registrySelector, request);
+      const response = yield client.fetch(url, request);
       console.log(JSON.stringify(response, null, 2));
     } catch (err) {
       console.error(err);

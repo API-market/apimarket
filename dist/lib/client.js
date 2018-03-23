@@ -32,6 +32,10 @@ const ipfsAPI = require('ipfs-api');
 
 const url = require('url');
 
+const {
+  fromRegistry
+} = require('./server');
+
 const connectIPFS = endpoint => {
   const ipfsurl = url.parse(endpoint);
   const ipfs = ipfsAPI({
@@ -91,10 +95,19 @@ function () {
       from: address
     };
     paymentChannelInstance = new PaymentChannel(address, web3, "nedb", "clientDB");
+    return {
+      fetch: function () {
+        var _ref2 = _asyncToGenerator(function* (endpoint, request) {
+          const voucherAddress = fromRegistry(config, endpoint).voucher.address;
+          const apiCapability = yield open(voucherAddress);
+          return capability.perform(apiCapability, request);
+        });
 
-    const voucherAddress = require('./server').fromRegistry(config).voucher.address;
-
-    return yield open(voucherAddress);
+        return function fetch(_x3, _x4) {
+          return _ref2.apply(this, arguments);
+        };
+      }()
+    };
   });
 
   return function (_x, _x2) {
@@ -105,7 +118,7 @@ function () {
 exports.purchase =
 /*#__PURE__*/
 function () {
-  var _ref2 = _asyncToGenerator(function* (offerAddress) {
+  var _ref3 = _asyncToGenerator(function* (offerAddress) {
     const offer = yield instrument.at(offerAddress, {
       web3,
       ipfs
@@ -123,15 +136,15 @@ function () {
     return instrument.address(voucher);
   });
 
-  return function (_x3) {
-    return _ref2.apply(this, arguments);
+  return function (_x5) {
+    return _ref3.apply(this, arguments);
   };
 }();
 
 const findVoucherAddress =
 /*#__PURE__*/
 function () {
-  var _ref3 = _asyncToGenerator(function* (offerAddress, userAddress) {
+  var _ref4 = _asyncToGenerator(function* (offerAddress, userAddress) {
     const abi = contract.abi.instrumentFactoryWithToken;
     const offer = web3.eth.contract(abi).at(offerAddress);
     const eventFilter = offer.InstrumentCreated({
@@ -152,28 +165,28 @@ function () {
     return event.args.instrument;
   });
 
-  return function findVoucherAddress(_x4, _x5) {
-    return _ref3.apply(this, arguments);
+  return function findVoucherAddress(_x6, _x7) {
+    return _ref4.apply(this, arguments);
   };
 }();
 
 exports.load =
 /*#__PURE__*/
 function () {
-  var _ref4 = _asyncToGenerator(function* (offerAddress, userAddress) {
+  var _ref5 = _asyncToGenerator(function* (offerAddress, userAddress) {
     const voucherAddress = yield findVoucherAddress(offerAddress, userAddress, web3);
     return open(voucherAddress, options);
   });
 
-  return function (_x6, _x7) {
-    return _ref4.apply(this, arguments);
+  return function (_x8, _x9) {
+    return _ref5.apply(this, arguments);
   };
 }();
 
 const open =
 /*#__PURE__*/
 function () {
-  var _ref5 = _asyncToGenerator(function* (voucherAddress) {
+  var _ref6 = _asyncToGenerator(function* (voucherAddress) {
     const voucher = yield instrument.at(voucherAddress, {
       web3,
       ipfs
@@ -183,14 +196,11 @@ function () {
       web3,
       paymentChannelInstance
     });
-    return {
-      // NOTE: registrySelector is currently ignored as we only have one API in the registry
-      fetch: (registrySelector, request) => capability.perform(apiCapability, request)
-    };
+    return apiCapability;
   });
 
-  return function open(_x8) {
-    return _ref5.apply(this, arguments);
+  return function open(_x10) {
+    return _ref6.apply(this, arguments);
   };
 }();
 

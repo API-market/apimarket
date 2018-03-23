@@ -30,7 +30,7 @@ const verifierPublicKeyFromConfig = config => {
   return config.verifier.publicKey.replace(/\\n/g, '\n');
 };
 
-const fromRegistry = config => {
+const fromRegistry = (config, endpoint) => {
   const registry = config.registry;
   const names = Object.keys(registry);
 
@@ -39,17 +39,14 @@ const fromRegistry = config => {
   }
 
   const key = names[0];
-  return registry[key];
+  const scope = registry[key];
+  return scope[endpoint];
 };
 
 exports.fromRegistry = fromRegistry;
 
-const apiEndpointFromConfig = config => {
-  return fromRegistry(config).endpoint;
-};
-
-const instrumentAddressFromConfig = config => {
-  return fromRegistry(config).offer.address;
+const instrumentAddressFromConfig = (endpoint, config) => {
+  return fromRegistry(config, endpoint).offer.address;
 };
 
 const Web3 = require('web3');
@@ -62,6 +59,7 @@ const connectWeb3 = ({
 };
 
 const ipfsAPI = require('ipfs-api');
+
 const url = require('url');
 
 const connectIPFS = ({
@@ -79,7 +77,7 @@ const connectIPFS = ({
 const middlewareFor =
 /*#__PURE__*/
 function () {
-  var _ref = _asyncToGenerator(function* (config, web3, ipfs) {
+  var _ref = _asyncToGenerator(function* (endpoint, config, web3, ipfs) {
     if (web3 === undefined) {
       web3 = connectWeb3(config.services.web3);
     }
@@ -88,14 +86,13 @@ function () {
       ipfs = connectIPFS(config.services.ipfs);
     }
 
-    const instrumentAddress = instrumentAddressFromConfig(config);
-    const apiEndpoint = apiEndpointFromConfig(config);
+    const instrumentAddress = instrumentAddressFromConfig(endpoint, config);
     const offer = yield instrument.at(instrumentAddress, {
       web3,
       ipfs
     });
     const [voucherRight] = instrument.searchRights(offer, capability.forAPI({
-      apiEndpoint
+      apiEndpoint: endpoint
     }));
 
     if (!voucherRight) {
@@ -116,7 +113,7 @@ function () {
     return chain;
   });
 
-  return function middlewareFor(_x, _x2, _x3) {
+  return function middlewareFor(_x, _x2, _x3, _x4) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -171,17 +168,16 @@ const buildServer = (endpoint, handler, ...middlewares) => {
 const build =
 /*#__PURE__*/
 function () {
-  var _ref2 = _asyncToGenerator(function* (handler, config) {
-    const middleware = yield middlewareFor(config);
-    const apiEndpoint = apiEndpointFromConfig(config);
-    const app = buildServer(apiEndpoint, handler, middleware);
+  var _ref2 = _asyncToGenerator(function* (endpoint, handler, config) {
+    const middleware = yield middlewareFor(endpoint, config);
+    const app = buildServer(endpoint, handler, middleware);
 
     const server = require('http').createServer(app);
 
     return server;
   });
 
-  return function build(_x4, _x5) {
+  return function build(_x5, _x6, _x7) {
     return _ref2.apply(this, arguments);
   };
 }();
