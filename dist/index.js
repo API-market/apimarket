@@ -2,6 +2,16 @@
 
 require("core-js/modules/es6.array.sort");
 
+require("core-js/modules/es7.object.values");
+
+require("core-js/modules/es7.object.entries");
+
+require("core-js/modules/es7.object.get-own-property-descriptors");
+
+require("core-js/modules/es7.string.pad-start");
+
+require("core-js/modules/es7.string.pad-end");
+
 const client = require('./lib/client');
 
 const server = require('./lib/server');
