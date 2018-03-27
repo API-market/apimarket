@@ -34,7 +34,7 @@
     "ipfs-mini": "^1.1.2",
     "keythereum": "^1.0.2",
     "morgan": "^1.9.0",
-    "open-rights-exchange": "git+https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#dev",
+    "open-rights-exchange": "git+https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#master",
     "payment-channel": "git+https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/payment_channel.git#master",
     "url-parse": "^1.2.0",
     "url-polyfill": "^1.0.11",
