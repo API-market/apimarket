@@ -5,16 +5,14 @@ const Web3 = require('web3');
 
 const IPFS = require('ipfs-mini');
 
-const {
-  URL
-} = require('url');
+const url = require('url');
 
 const connectIPFS = endpoint => {
-  const url = new URL(endpoint);
+  const ipfsURL = url.parse(endpoint);
   const ipfs = new IPFS({
-    host: url.hostname,
-    port: url.port,
-    protocol: url.protocol.slice(0, -1)
+    host: ipfsURL.hostname,
+    port: ipfsURL.port,
+    protocol: ipfsURL.protocol.slice(0, -1)
   });
   return ipfs;
 };

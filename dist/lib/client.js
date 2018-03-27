@@ -66,7 +66,7 @@ function () {
       gasPrice: options.gasPrice,
       from: address
     };
-    paymentChannelInstance = new PaymentChannel(address, web3, "nedb", "clientDB");
+    paymentChannelInstance = new PaymentChannel(address, web3, config.services.payment_channel.databaseUrl);
     return {
       fetch: function () {
         var _ref2 = _asyncToGenerator(function* (endpoint, request) {

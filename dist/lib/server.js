@@ -45,11 +45,11 @@ const middlewareFor =
 function () {
   var _ref = _asyncToGenerator(function* (endpoint, config, web3, ipfs) {
     if (web3 === undefined) {
-      web3 = connectWeb3(config.services.web3);
+      web3 = connectWeb3(config.services.web3.endpoint);
     }
 
     if (ipfs === undefined) {
-      ipfs = connectIPFS(config.services.ipfs);
+      ipfs = connectIPFS(config.services.ipfs.endpoint);
     }
 
     const instrumentAddress = instrumentAddressFromConfig(endpoint, config);
@@ -109,9 +109,10 @@ const buildServer = (endpoint, handler, ...middlewares) => {
 
   for (let middleware of middlewares) {
     app.use(middleware);
-  }
+  } //const path = new URL(endpoint).pathname
 
-  const path = new URL(endpoint).pathname;
+
+  const path = url.parse(endpoint).pathname;
   app.post(path, handler); // catch 404 and forward to error handler
 
   app.use(function (req, res, next) {
