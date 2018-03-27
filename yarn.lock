@@ -2149,7 +2149,7 @@ ipaddr.js@1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.6.0.tgz#e3fa357b773da619f26e95f049d055c72796f86b"
 
-ipfs-api@^18.1.2, ipfs-api@^18.2.0:
+ipfs-api@^18.1.2:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-18.2.0.tgz#10b3095509aa4ec121ba1b4a7e29edea4e61281d"
   dependencies:
