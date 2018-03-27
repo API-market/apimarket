@@ -26,6 +26,8 @@ function () {
     } catch (err) {
       console.error(err);
     }
+
+    process.exit(0);
   });
 
   return function run() {

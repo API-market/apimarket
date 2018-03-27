@@ -94,9 +94,7 @@ const cookieParser = require('cookie-parser');
 
 const bodyParser = require('body-parser');
 
-const {
-  URL
-} = require('url');
+const url = require('url');
 
 const buildServer = (endpoint, handler, ...middlewares) => {
   const app = express();
