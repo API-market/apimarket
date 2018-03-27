@@ -2,10 +2,10 @@
   "presets": [
     ["@babel/env", {
       "targets": {
-        "node": "current"
+        "node": "6.11.5"
       },
       "debug": true,
-      "useBuiltIns": "entry"
+      "useBuiltIns": "usage"
     }]
   ],
 

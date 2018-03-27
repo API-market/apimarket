@@ -1,4 +1,3 @@
-import '@babel/polyfill'
 const { initServer } = require('../../index')
 
 const fs = require('fs')

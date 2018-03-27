@@ -1,17 +1,5 @@
 "use strict";
 
-require("core-js/modules/es6.array.sort");
-
-require("core-js/modules/es7.object.values");
-
-require("core-js/modules/es7.object.entries");
-
-require("core-js/modules/es7.object.get-own-property-descriptors");
-
-require("core-js/modules/es7.string.pad-start");
-
-require("core-js/modules/es7.string.pad-end");
-
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } } function _next(value) { step("next", value); } function _throw(err) { step("throw", err); } _next(); }); }; }
 
 const {
