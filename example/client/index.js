@@ -1,5 +1,5 @@
 const fs = require('fs')
-const apimarket = require('../../dist/index');
+const apimarket = require('../../index');
 
 const configFilePath = '/config.json'
 const config = JSON.parse(fs.readFileSync(__dirname + configFilePath))
@@ -10,12 +10,14 @@ const request = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.or
 const run = async () => {
   let client = await apimarket.init(config)
 
+  let url = "http://sandbox.dev.aikon.com:3405/"
   try {
-    const response = await client.fetch(registrySelector, request)
+    const response = await client.fetch(url, request)
     console.log(JSON.stringify(response, null, 2))
   } catch(err) {
     console.error(err)
   }
+  process.exit(0)
 }
 
 run()

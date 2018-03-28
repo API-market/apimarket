@@ -1,40 +1,23 @@
 const { initServer } = require('../../index')
 
-const config = {
-  "registry": {
-    "io.hadron.spaceTelescope": {
-      "endpoint": 'http://sandbox.dev.aikon.com:3405/',
-      "offer": {
-        "address": '0x19f9591fbe24b596434aaad7c80884a863a56b0e'
-      }
-    }
-  },
-  "verifier": {
-    "publicKey": `-----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfy0YUA2nDgEIbOC2FxE6wygiNFUd
-eH6vYfcHz+uioYq+GU81Axysh09GKhxsRu4OIK668BzCyw9DI/HDysTV2A==
------END PUBLIC KEY-----`
-  },
-  "services": {
-    "web3": {
-      "endpoint": "http://ganache1.api.market:8545"
-    },
-    "ipfs": {
-      "endpoint": "http://ipfs2-ext.dev.api.market:5001"
-    }
-  }
-}
+const fs = require('fs')
+
+const configFilePath = '/config.json'
+const config = JSON.parse(fs.readFileSync(__dirname + configFilePath))
 
 const port = process.env.PORT || 8080
+
+// in this example, we run a local server that is essentially a proxy, this name is used to select the right offer data, the remote endpoints are listed in the configuration
+const endpoint = "http://sandbox.dev.aikon.com:3405/"
 
 const handler = async (req, res) => {
   res.json({x: req.body.x + 1})
 }
 
-const run = async (port, handler, config) => {
-  const server = await initServer(handler, config)
+const run = async (endpoint, port, handler, config) => {
+  const server = await initServer(endpoint, handler, config)
 
   server.listen(port, () => console.log(`listening on port: ${port}`))
 }
 
-run(port, handler, config)
+run(endpoint, port, handler, config)
