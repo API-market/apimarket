@@ -13,9 +13,12 @@ const {
 const connect = require('connect');
 
 const {
-  connectIPFS,
+  connectIPFS
+} = require('./ipfs');
+
+const {
   connectWeb3
-} = require('./services');
+} = require('./web3');
 
 const verifierPublicKeyFromConfig = config => {
   return config.verifier.publicKey.replace(/\\n/g, '\n');
