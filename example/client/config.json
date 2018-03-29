@@ -33,7 +33,7 @@
       "endpoint": "http://ipfs2-ext.dev.api.market:5001"
     },
     "payment_channel": {
-      "databaseUrl": "mongodb://hadron-db-user:pJcAWqwA9CEEou9b@ds127509-a0.mlab.com:27509,ds127509-a1.mlab.com:27509/client-hadron-p1?replicaSet=rs-ds127509"
+      "databaseUrl": "mongodb://..."
     }
   },
   "password": "unicrons"
