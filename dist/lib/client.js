@@ -19,9 +19,12 @@ const {
 } = require('./server');
 
 const {
-  connectIPFS,
+  connectIPFS
+} = require('./ipfs');
+
+const {
   connectWeb3
-} = require('./services');
+} = require('./web3');
 
 let web3;
 let ipfs;

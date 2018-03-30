@@ -33,7 +33,7 @@
       "endpoint": "http://ipfs2-ext.dev.api.market:5001"
     },
     "payment_channel": {
-      "databaseUrl": "mongodb://db-dev-user:wkrAyXAq2xbV3WAR@ds121089.mlab.com:21089/client-dev"
+      "databaseUrl": "mongodb://..."
     }
   },
   "password": "unicrons"
