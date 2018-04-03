@@ -1189,6 +1189,10 @@ dotenv@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
+dotenv@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.1.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
+
 drbg.js@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/drbg.js/-/drbg.js-1.0.1.tgz#3e36b6c42b37043823cdbc332d58f31e2445480b"
@@ -2531,9 +2535,9 @@ once@^1.3.0, once@^1.3.1, once@^1.3.3, once@^1.4.0:
   dependencies:
     wrappy "1"
 
-"open-rights-exchange@git+https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#dev":
+"open-rights-exchange@git+https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#master":
   version "1.0.0"
-  resolved "git+https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#a6563daa505bb9b09bff1c8d8c6bcdc71128faf6"
+  resolved "git+https://apim-npmbot:a0bf84a9cf09faff782e7a134f0153a105db36d4@github.com/api-market/protocol.git#ab304a6b595a405b51c04cb6a34661c039037164"
   dependencies:
     "@babel/cli" "^7.0.0-beta.42"
     "@babel/core" "^7.0.0-beta.42"
@@ -2541,6 +2545,7 @@ once@^1.3.0, once@^1.3.1, once@^1.3.3, once@^1.4.0:
     "@babel/preset-env" "^7.0.0-beta.42"
     clean "^4.0.2"
     cookie-parser "^1.4.3"
+    dotenv "^5.0.1"
     elliptic "^6.4.0"
     ethereumjs-util "^5.1.4"
     ipfs-mini "^1.1.2"
