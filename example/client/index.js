@@ -10,7 +10,7 @@ const request = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.or
 const run = async () => {
   let client = await apimarket.init(config)
 
-  let url = "http://sandbox.dev.aikon.com:3405/"
+  let url = "https://us-central1-partner-hadron.cloudfunctions.net/hadron"
   try {
     const response = await client.fetch(url, request)
     console.log(JSON.stringify(response, null, 2))
