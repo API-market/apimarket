@@ -3,17 +3,17 @@
     "io.hadron.spaceTelescope": {
       "http://sandbox.dev.aikon.com:3405/": {
         "offer": {
-          "address": "0x19f9591fbe24b596434aaad7c80884a863a56b0e"
+          "address": "0xe72ac1ba5288fd650df1f4298d733486a32a93aa"
         }
       },
       "https://us-central1-partner-hadron.cloudfunctions.net/hadron": {
         "offer": {
-          "address": "0x06297cf977af3799f1d4b2533d63955fec874734"
+          "address": "0x77dc10d78f3205e1c7a3e0506476bd6d875c8376"
         }
       },
-      "http://hadron1.dev.api.market/": {
+      "https://hadron.aikon.com": {
         "offer": {
-          "address": "0x81be046114921cf123e836192e403928ecb0bba0"
+          "address": "0xa27b6f2b68a25321e3ab9c9d134d44227953c028"
         }
       }
     }
@@ -23,7 +23,7 @@
   },
   "services": {
     "web3": {
-      "endpoint": "http://ganache1.api.market:8545"
+      "endpoint": "http://private-geth.aikon.com:8545"
     },
     "ipfs": {
       "endpoint": "http://ipfs2-ext.dev.api.market:5001"

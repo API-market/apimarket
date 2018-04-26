@@ -565,8 +565,13 @@
   resolved "https://registry.yarnpkg.com/@types/bignumber.js/-/bignumber.js-4.0.3.tgz#e8ce5f28c3025a01c6af7fc6d944494903a9e348"
 
 "@types/node@*":
+<<<<<<< HEAD
   version "9.6.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.6.tgz#439b91f9caf3983cad2eef1e11f6bedcbf9431d2"
+=======
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.0.0.tgz#c40f8e07dce607d3ef25a626b93a6a7cdcf97881"
+>>>>>>> 1d3ca3601ae3652ca639e5089db297ef6e762d75
 
 "@types/uuid@^3.4.3":
   version "3.4.3"
@@ -849,8 +854,13 @@ browserify-aes@^1.0.6:
     safe-buffer "^5.0.1"
 
 browserslist@^3.0.0:
+<<<<<<< HEAD
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-3.2.5.tgz#aa46a5ea33b5330178f3c91cfd85e148fcb57080"
+=======
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-3.2.6.tgz#138a44d04a9af64443679191d041f28ce5b965d5"
+>>>>>>> 1d3ca3601ae3652ca639e5089db297ef6e762d75
   dependencies:
     caniuse-lite "^1.0.30000830"
     electron-to-chromium "^1.3.42"
@@ -919,8 +929,13 @@ chalk@^1.1.3:
     supports-color "^2.0.0"
 
 chalk@^2.0.0, chalk@^2.3.0:
+<<<<<<< HEAD
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.0.tgz#a060a297a6b57e15b61ca63ce84995daa0fe6e52"
+=======
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
+>>>>>>> 1d3ca3601ae3652ca639e5089db297ef6e762d75
   dependencies:
     ansi-styles "^3.2.1"
     escape-string-regexp "^1.0.5"
@@ -2491,7 +2506,11 @@ once@^1.3.0:
 
 "open-rights-exchange@git+https://apim-npmbot:LtT3pgcj9YAxMrNN@github.com/api-market/protocol.git#dev":
   version "1.0.0"
+<<<<<<< HEAD
   resolved "git+https://apim-npmbot:LtT3pgcj9YAxMrNN@github.com/api-market/protocol.git#d498b30811129894efe023d7869b96af0b81a249"
+=======
+  resolved "git+https://apim-npmbot:LtT3pgcj9YAxMrNN@github.com/api-market/protocol.git#310b0bc4c6a316fb9863b89985e866bf451d64d1"
+>>>>>>> 1d3ca3601ae3652ca639e5089db297ef6e762d75
   dependencies:
     clean "^4.0.2"
     cookie-parser "^1.4.3"
@@ -3014,10 +3033,17 @@ rlp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.0.0.tgz#9db384ff4b89a8f61563d92395d8625b18f3afb0"
 
-safe-buffer@5.1.1, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
+safe-buffer@5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
 
+<<<<<<< HEAD
+=======
+safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
+
+>>>>>>> 1d3ca3601ae3652ca639e5089db297ef6e762d75
 safer-buffer@^2.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
@@ -3357,8 +3383,8 @@ tslint@^5.9.1:
     tsutils "^2.12.1"
 
 tsutils@^2.12.1:
-  version "2.26.1"
-  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.26.1.tgz#9e4a0cb9ff173863f34c22a961969081270d1878"
+  version "2.26.2"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.26.2.tgz#a9f9f63434a456a5e0c95a45d9a59181cb32d3bf"
   dependencies:
     tslib "^1.8.1"
 
