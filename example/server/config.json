@@ -23,7 +23,7 @@
   },
   "services": {
     "web3": {
-      "endpoint": "http://ganache1.api.market:8545"
+      "endpoint": "http://private-geth.aikon.com:8545"
     },
     "ipfs": {
       "endpoint": "http://ipfs2-ext.dev.api.market:5001"
