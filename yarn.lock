@@ -1852,7 +1852,7 @@ once@^1.3.0:
 
 "open-rights-exchange@git+https://apim-npmbot:LtT3pgcj9YAxMrNN@github.com/api-market/protocol.git#dev":
   version "1.0.0"
-  resolved "git+https://apim-npmbot:LtT3pgcj9YAxMrNN@github.com/api-market/protocol.git#4f0aa81982e504790be93317d7203b3cb16d90fd"
+  resolved "git+https://apim-npmbot:LtT3pgcj9YAxMrNN@github.com/api-market/protocol.git#1fbeda099d5dc701efd6b6fe745d229adc875d94"
   dependencies:
     clean "^4.0.2"
     cookie-parser "^1.4.3"
