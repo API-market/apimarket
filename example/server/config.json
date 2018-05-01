@@ -3,17 +3,17 @@
     "io.hadron.spaceTelescope": {
       "http://sandbox.dev.aikon.com:3405/": {
         "offer": {
-          "address": "0x05c87a89811f637afd6ec401295d317d1a2eeac9"
+          "address": "0x9492d278f51d8b0ee5526977ffe6bbcc3ccf7152"
         }
       },
       "https://us-central1-partner-hadron.cloudfunctions.net/hadron": {
         "offer": {
-          "address": "0x4856d3a5dbc89e56563bf815fed885810eafe8b3"
+          "address": "0xb17e4d0295b12b3db4503b94231ca373304631b9"
         }
       },
       "https://hadron.aikon.com": {
         "offer": {
-          "address": "0xb3c13c05f2eef63e08c8dcdb6b01062713b57311"
+          "address": "0xef06eda62ccc83d5cc7c99cb7ba036b0ade7b889"
         }
       }
     }
