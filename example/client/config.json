@@ -3,38 +3,34 @@
     "io.hadron.spaceTelescope": {
       "http://sandbox.dev.aikon.com:3405/": {
         "voucher": {
-          "address": "0x9284aea5c5424ab867a9121abd4cca75b60cd8ec"
+          "address": "0x05c87a89811f637afd6ec401295d317d1a2eeac9"
         }
       },
-      "https://us-central1-partner-hadron.cloudfunctions.net/hadron": {
+      "https://api.hadron.cloud:8686/spacetelescope": {
         "voucher": {
-          "address": "0xd21a7574633b3277a6dcb9b1c0ab786b3fa0dda1"
+          "address": "0x4856d3a5dbc89e56563bf815fed885810eafe8b3"
         }
       },
       "https://hadron.aikon.com": {
         "voucher": {
-          "address": "0x5027351379edd3598ba50efed4667d173f3a029d"
+          "address": "0xb3c13c05f2eef63e08c8dcdb6b01062713b57311"
         }
       }
     }
   },
   "contracts": {
-    "cpuContract": "0x53b8e45e717367b8b13d53de31ed715d3ca5f95d",
-    "paymentChannel": "0xbc727c5e58ed3209b56fa559190aec9874ade8d2"
+    "cpuContract": "0xe3f0505e068cc098b45f077a331579e9099e817a"
   },
   "address": {
-    "holder": "0x60d6b1f7d2f7ea403a840d1564915f299571149c",
+    "holder": "0x315e20d719bfbb6fe0ac6b09ed677adf4e14dc15",
     "passphrase": "passphrase"
   },
   "services": {
     "web3": {
-      "endpoint": "http://private-geth.aikon.com:8545"
+      "endpoint": "http://private-geth.aikon.com:15458"
     },
     "ipfs": {
       "endpoint": "http://ipfs2-ext.dev.api.market:5001"
-    },
-    "payment_channel": {
-      "databaseUrl": "mongodb://localhost:27017/client"
     }
   },
   "password": "unicrons"
