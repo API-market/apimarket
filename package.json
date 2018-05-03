@@ -1,6 +1,6 @@
 {
   "name": "@apimarket/apimarket-server",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "This repository contains a library for interacting with the AIKON marketplace.",
   "main": "./dist/index.js",
   "scripts": {
