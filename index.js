@@ -1,4 +1,5 @@
-const client = require('./lib/client')
+process.env.NEW_RELIC_HOME = __dirname
+require('newrelic')
 const server = require('./lib/server')
 const asyncHandler = require('express-async-handler')
 
@@ -8,4 +9,4 @@ exports.middlewareFor = asyncHandler(server.middlewareFor)
 // returns an express server ready to `listen` on a `port`
 exports.initServer = server.build
 
-exports.init = client.init
+
