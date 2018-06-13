@@ -1,3 +1,4 @@
+.env
+.npmrc
 clientDB
 node_modules
-.npmrc
