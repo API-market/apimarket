@@ -8,7 +8,7 @@ const run = async () => {
     oreAccountName: "eosio",
   })
 
-  const url = "http://sandbox.dev.aikon.com:3405/"
+  const url = "http://localhost:8080"
   const body = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
 
   try {
