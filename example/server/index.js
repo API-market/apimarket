@@ -15,7 +15,7 @@ const run = async () => {
   }
 
   try {
-    const httpServer = await server.http(endpoint, handler)
+    const httpServer = await server.httpServer(endpoint, handler)
     httpServer.listen(port, () => console.log(`listening on port: ${port}`))
   } catch(err) {
     console.error(err)
