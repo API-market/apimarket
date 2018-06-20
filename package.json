@@ -1,6 +1,6 @@
 {
   "name": "@apimarket/apimarket",
-  "version": "0.5.17",
+  "version": "0.5.23",
   "description": "This repository contains a library for interacting with the AIKON marketplace.",
   "main": "./dist/index.js",
   "scripts": {
@@ -35,7 +35,6 @@
     "keythereum": "^1.0.2",
     "morgan": "^1.9.0",
     "open-rights-exchange": "git+https://apim-npmbot:LtT3pgcj9YAxMrNN@github.com/api-market/protocol.git#dev",
-    "payment-channel": "git+https://apim-npmbot:LtT3pgcj9YAxMrNN@github.com/api-market/payment_channel.git#master",
     "tslint": "^5.9.1",
     "typescript": "^2.8.1",
     "url-parse": "^1.2.0",
