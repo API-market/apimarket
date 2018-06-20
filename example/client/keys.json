@@ -1,14 +1,6 @@
 {
   "walletPassword": "password",
   "oreAccountName": "qytgmzvgqzdg",
-  "keys": {
-    "privateKeys": {
-      "owner": "U2FsdGVkX19ZO89pnWnoNOOjgWk1eyFbEsQB787iZNobSJNdQQtWihLIPWFCA6xBsIiqPR6Y3QkNwAzl3MF2EZBDKDLTjb01nym1OEfk7GA=",
-      "active": "U2FsdGVkX1+rfUQWnnPnY3YYagnUj5yQYUfKbWFKkDmXx71sLgSl3j6+9em7S4c6XsAa49nCiRnKYWieAj5aG9q79pqOlTtlkBj80mCiFsg="
-    },
-    "publicKeys": {
-      "owner": "EOS5g5pmmWzDfUqc1T6Vmn2EnkNjSrLTvw8x4mFg37RuRXbQf98DF",
-      "active": "EOS86TSSW8kq8zWv4eeYYRzEgd7F1JYKNVRifE9Fka3kpZNMeQaeo"
-    }
-  }
+  "privateKey": "U2FsdGVkX1+rfUQWnnPnY3YYagnUj5yQYUfKbWFKkDmXx71sLgSl3j6+9em7S4c6XsAa49nCiRnKYWieAj5aG9q79pqOlTtlkBj80mCiFsg=",
+  "publicKey": "EOS86TSSW8kq8zWv4eeYYRzEgd7F1JYKNVRifE9Fka3kpZNMeQaeo"
 }
