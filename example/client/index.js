@@ -9,12 +9,12 @@ const run = async () => {
     oreAccountName: "apiuser"
   })
 
-  const url = "https://hadron.aikon.com"
-  const body = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
+  const apiName = "some_right_2"
+  const data = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
 
   try {
-    const response = await client.fetch(url, body)
-    //console.log(JSON.stringify(response, null, 2))
+    const response = await client.fetch(apiName, data)
+    console.log(JSON.stringify(response, null, 2))
   } catch(err) {
     console.error(err)
   }
