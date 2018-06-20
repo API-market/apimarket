@@ -1,3 +1,5 @@
-clientDB
-node_modules
+.env
 .npmrc
+clientDB
+dist
+node_modules
