@@ -1,14 +1,15 @@
+const dotenv = require("dotenv")
 const {Client} = require('../../index')
 
 const run = async () => {
   let client = new Client({
-    httpEndpoint: "http://eos1.aikon.com:8888",
+    httpEndpoint: "http://127.0.0.1:8888",
     keyFilePath: "/../example/client/keys.json",
     keyProvider: "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3",
-    oreAccountName: "eosio",
+    oreAccountName: "apiuser"
   })
 
-  const url = "http://localhost:8080"
+  const url = "https://hadron.aikon.com"
   const body = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
 
   try {
