@@ -5,7 +5,7 @@ const run = async () => {
   let client = new Client({
     httpEndpoint: "http://127.0.0.1:8888",
     keyFilePath: "/../example/client/keys.json",
-    keyProvider: "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3",
+    keyProvider: "5JayvgDa4A5JJSxc732jfs3E9iv78rVXNPKXAeyH3Bt4t25d8cc",
     oreAccountName: "apiuser"
   })
 
