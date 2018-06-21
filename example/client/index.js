@@ -1,12 +1,12 @@
 const dotenv = require("dotenv")
 const {Client} = require('../../index')
 
+dotenv.config({path: './example/client/.env'})
+
 const run = async () => {
   let client = new Client({
-    httpEndpoint: "http://127.0.0.1:8888",
-    keyFilePath: "/../example/client/keys.json",
-    keyProvider: "5JayvgDa4A5JJSxc732jfs3E9iv78rVXNPKXAeyH3Bt4t25d8cc",
-    oreAccountName: "apiuser"
+    oreNetworkUri: process.env.ORE_NETWORK_URI,
+    keyFilePath: process.env.KEY_FILE_PATH
   })
 
   const apiName = "some_right_2"
