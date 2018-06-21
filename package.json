@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles",
-    "copyfiles": "cp ./example/client/config.json ./dist/example/client && cp ./example/client/keys.json ./dist/example/client && cp ./example/server/config.json ./dist/example/server",
+    "copyfiles": "cp ./example/client/.env ./dist/example/client && cp ./example/client/keys.json ./dist/example/client && cp ./example/server/config.json ./dist/example/server",
     "example:server": "node --trace-warnings ./dist/example/server/index.js",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",
@@ -33,7 +33,7 @@
     "jsonwebtoken": "^8.3.0",
     "morgan": "^1.9.0",
     "node-fetch": "^2.1.2",
-    "orejs": "git+https://github.com/API-market/orejs.git",
+    "orejs": "git+https://github.com/API-market/orejs.git#master",
     "tslint": "^5.9.1",
     "typescript": "^2.8.1",
     "url-parse": "^1.2.0",
