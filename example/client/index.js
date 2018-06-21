@@ -1,18 +1,19 @@
-const fs = require('fs')
-const apimarket = require('../../index');
-
-const configFilePath = '/config.json'
-const config = JSON.parse(fs.readFileSync(__dirname + configFilePath))
-
-const registrySelector = 'io.hadron.spaceTelescope'
-const request = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
+const dotenv = require("dotenv")
+const {Client} = require('../../index')
 
 const run = async () => {
-  let client = await apimarket.init(config)
+  let client = new Client({
+    httpEndpoint: "http://127.0.0.1:8888",
+    keyFilePath: "/../example/client/keys.json",
+    keyProvider: "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3",
+    oreAccountName: "apiuser"
+  })
 
-  let url = "http://sandbox.dev.aikon.com:3405/"
+  const apiName = "some_right_2"
+  const data = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
+
   try {
-    const response = await client.fetch(url, request)
+    const response = await client.fetch(apiName, data)
     console.log(JSON.stringify(response, null, 2))
   } catch(err) {
     console.error(err)
