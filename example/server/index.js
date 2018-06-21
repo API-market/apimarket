@@ -8,7 +8,7 @@ const run = async () => {
   })
 
   const handler = async (req, res) => {
-    res.json({x: req.body.x + 1})
+    res.json({x: req.body.requestParams.x + 1})
   }
 
   const httpServer = await server.httpServer(handler)
