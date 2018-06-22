@@ -1,23 +1,17 @@
-const { initServer } = require('../../index')
+require('dotenv').config()
+const {Server} = require('../../index')
 
-const fs = require('fs')
+const PORT = process.env.PORT || 8080
 
-const configFilePath = '/config.json'
-const config = JSON.parse(fs.readFileSync(__dirname + configFilePath))
+const run = async () => {
+  let server = new Server(process.env.VERIFIER_PUBLIC_KEY)
 
-const port = process.env.PORT || 8080
+  const handler = async (req, res) => {
+    res.json({x: req.body.x + 1})
+  }
 
-// in this example, we run a local server that is essentially a proxy, this name is used to select the right offer data, the remote endpoints are listed in the configuration
-const endpoint = "http://sandbox.dev.aikon.com:3405/"
-
-const handler = async (req, res) => {
-  res.json({x: req.body.x + 1})
+  const httpServer = await server.httpServer(handler)
+  httpServer.listen(PORT, () => console.log(`Server listening on port: ${PORT}`))
 }
 
-const run = async (endpoint, port, handler, config) => {
-  const server = await initServer(endpoint, handler, config)
-
-  server.listen(port, () => console.log(`listening on port: ${port}`))
-}
-
-run(endpoint, port, handler, config)
+run()
