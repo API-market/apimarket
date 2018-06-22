@@ -1,11 +1,10 @@
+require('dotenv').config()
 const {Server} = require('../../index')
 
 const PORT = process.env.PORT || 8080
 
 const run = async () => {
-  let server = new Server({
-    configFilePath: "/../example/server/config.json"
-  })
+  let server = new Server(process.env.VERIFIER_PUBLIC_KEY)
 
   const handler = async (req, res) => {
     res.json({x: req.body.x + 1})
