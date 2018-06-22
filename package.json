@@ -4,10 +4,10 @@
   "description": "This repository contains a library for interacting with the AIKON marketplace.",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "babel . --ignore node_modules,dist --out-dir dist",
-    "copyfiles": "cp ./example/client/.env./dist/example/client && cp ./example/client/keys.json ./dist/example/client && cp ./example/server/.env ./dist/example/server",
-    "example:server": "node --trace-warnings ./example/server/index.js",
-    "example:client": "node --trace-warnings ./example/client/index.js",
+    "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles",
+    "copyfiles": "cp ./example/client/.env ./dist/example/client && cp ./example/client/keys.json ./dist/example/client && cp ./example/server/config.json ./dist/example/server",
+    "example:server": "node --trace-warnings ./dist/example/server/index.js",
+    "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
