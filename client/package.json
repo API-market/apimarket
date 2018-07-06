@@ -8,7 +8,8 @@
     "copyfiles": "cp ./example/.env ./dist/example/client && cp ./example/apimarket_keyfile.json ./dist/example/client",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",
-    "publish": "npm pulish --tag alpha",
+    "publish": "npm publish",
+    "publish-staging":  "npm publish --tag staging",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

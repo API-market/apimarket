@@ -8,7 +8,8 @@
     "copyfiles": "cp ./example/.env ./dist/example/",
     "example:client": "node --trace-warnings ./dist/example/server/index.js",
     "prepublish": "npm run build",
-    "publish": "npm pulish --tag alpha",
+    "publish": "npm publish",
+    "publish-staging":  "npm publish --tag staging",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
