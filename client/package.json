@@ -1,6 +1,6 @@
 {
   "name": "@apimarket/apimarket",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Client library for api.market",
   "main": "./dist/index.js",
   "scripts": {
@@ -8,8 +8,6 @@
     "copyfiles": "cp ./example/.env ./dist/example/client && cp ./example/apimarket_keyfile.json ./dist/example/client",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",
-    "publish": "npm publish",
-    "publishstaging":  "npm publish --tag staging",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

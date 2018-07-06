@@ -39,7 +39,7 @@ console.log(result)
 # Publish NPM Package
 
 - Update version number in package.json
-- `npm publishstaging` - to publish staging version
+- `npm publish --tag staging` - to publish staging version
 - `npm publish` - to publish the production version
 
-   package name will be: @apimarket/apimarket@{version}
+package name will be: @apimarket/apimarket@{version}
