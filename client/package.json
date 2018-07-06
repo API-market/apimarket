@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles",
-    "copyfiles": "cp ./example/.env ./dist/example/client && cp ./example/xapimarket_keyfile.json ./dist/example/client",
+    "copyfiles": "cp ./example/.env ./dist/example/client && cp ./example/apimarket_keyfile.json ./dist/example/client",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",
     "publish": "npm pulish --tag alpha",
