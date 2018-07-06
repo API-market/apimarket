@@ -2,9 +2,9 @@ const fs = require('fs')
 const fetch = require('node-fetch')
 const {Orejs, ore} = require('orejs')
 
-const VOUCHER_CATEGORY = "apim.apiVoucher"
-const VERIFIER_ACCOUNT_NAME = "ore.verifier"
-const VERIFIER_URI = ""
+const VOUCHER_CATEGORY = "apimarket.apiVoucher"
+const VERIFIER_ACCOUNT_NAME = "verifier.ore"
+const VERIFIER_URI = "https://verifier-staging-dot-open-rights-exchange.appspot.com/verify"
 
 class Client {
   constructor(config) {
@@ -12,6 +12,7 @@ class Client {
     this.keys = JSON.parse(fs.readFileSync(__dirname + config.keyFilePath))
     this.keyProvider = ore.decrypt(this.keys.privateKey.toString(), this.keys.walletPassword)
 
+    console.log("keyprovider",this.keyProvider)
     this.orejs = new Orejs({
       httpEndpoint: config.oreNetworkUri,
       keyProvider: this.keyProvider,
@@ -23,7 +24,7 @@ class Client {
   async getApiVoucherAndRight(apiName) {
     // Call orejs.findInstruments(oreAccountName, activeOnly:true, args:{category:’apiMarket.apiVoucher’, rightName:’xxxx’}) => [apiVouchers]
     const apiVouchers = await this.orejs.findInstruments(this.keys.oreAccountName, true, VOUCHER_CATEGORY, apiName)
-
+    console.log(apiVouchers)
     // Choose one voucher - rules to select between vouchers: use cheapest priced and then with the one that has the earliest endDate
     const apiVoucher = apiVouchers.sort((a, b) => {
       const rightA = this.orejs.getRight(a, apiName)
@@ -48,12 +49,11 @@ class Client {
         'Content-Type': 'application/json'
       }
     }
-    // TODO Request the url & accessToken from the verifier
-    //const {url, oreAccessToken, httpMethod} = await fetch(VERIFIER_URI, options)
-    let url = "https://hadron.aikon.com"
-    let oreAccessToken = ''
-    let httpMethod = 'POST'
-    return {url, oreAccessToken, httpMethod}
+
+    const result= await fetch(VERIFIER_URI, options)
+    
+    const {endpoint, oreAccessToken, method} = await result.json()
+    return {endpoint, oreAccessToken, method}
   }
 
   async callApiEndpoint(url, httpMethod, requestParams, oreAccessToken) {
@@ -81,10 +81,12 @@ class Client {
     await this.orejs.approveCpu(this.keys.oreAccountName, VERIFIER_ACCOUNT_NAME, apiRight.price_in_cpu)
     console.info("Approved!")
 
-    const {url, oreAccessToken, httpMethod} = await this.getUrlAndAccessToken(apiVoucher, apiRight, requestParams)
-    console.info("Url:", url)
+    // Call the verifier to get the access token
+    const {endpoint, oreAccessToken, method} = await this.getUrlAndAccessToken(apiVoucher, apiRight, requestParams)
+    console.info("Url:", endpoint)
 
-    const response = await this.callApiEndpoint(url, httpMethod, requestParams, oreAccessToken)
+    // Call the api
+    const response = await this.callApiEndpoint(endpoint, method, requestParams, oreAccessToken)
     console.info("Response:", response)
     return response.json()
   }

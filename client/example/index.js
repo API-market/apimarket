@@ -1,7 +1,7 @@
 const dotenv = require("dotenv")
-const {Client} = require('../../index')
+const {Client} = require('../index')
 
-dotenv.config({path: './example/client/.env'})
+dotenv.config({path: './.env'})
 
 const run = async () => {
   let client = new Client({
@@ -9,7 +9,7 @@ const run = async () => {
     keyFilePath: process.env.KEY_FILE_PATH
   })
 
-  const apiName = "some_right_2"
+  const apiName = "testapi"
   const data = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
 
   try {
