@@ -1,21 +1,21 @@
 {
   "name": "@apimarket/apimarket",
-  "version": "0.5.23",
-  "description": "This repository contains a library for interacting with the AIKON marketplace.",
+  "version": "0.6.0",
+  "description": "Client library for api.market",
   "main": "./dist/index.js",
   "scripts": {
     "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles",
-    "copyfiles": "cp ./example/client/.env ./dist/example/client && cp ./example/client/keys.json ./dist/example/client && cp ./example/server/.env ./dist/example/server",
-    "example:server": "node --trace-warnings ./dist/example/server/index.js",
+    "copyfiles": "cp ./example/.env ./dist/example/client && cp ./example/xapimarket_keyfile.json ./dist/example/client",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",
+    "publish": "npm pulish --tag alpha",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/api-market/apimarket.git"
   },
-  "author": "Aikon (www.aikon.com)",
+  "author": "api.market",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/api-market/apimarket/issues"

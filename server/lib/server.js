@@ -1,4 +1,3 @@
-const asyncHandler = require('express-async-handler')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const express = require('express')
