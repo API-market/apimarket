@@ -9,7 +9,7 @@
     "example:client": "node --trace-warnings ./dist/example/server/index.js",
     "prepublish": "npm run build",
     "publish": "npm publish",
-    "publish-staging":  "npm publish --tag staging",
+    "publishstaging":  "npm publish --tag staging",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
