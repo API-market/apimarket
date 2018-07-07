@@ -9,7 +9,7 @@ const run = async () => {
     keyFilePath: process.env.KEY_FILE_PATH
   })
 
-  const apiName = "testapi"
+  const apiName = "hadron-contest-1"
   const data = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
 
   try {

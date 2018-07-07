@@ -1,6 +1,6 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
-const {Orejs, ore} = require('orejs')
+const {Orejs, crypto} = require('orejs')
 
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const VERIFIER_ACCOUNT_NAME = "verifier.ore"
@@ -10,21 +10,20 @@ class Client {
   constructor(config) {
     this.config = config
     this.keys = JSON.parse(fs.readFileSync(__dirname + config.keyFilePath))
-    this.keyProvider = ore.decrypt(this.keys.privateKey.toString(), this.keys.walletPassword)
+    this.keyProvider = [crypto.decrypt(this.keys.privateKey.toString(), this.keys.walletPassword)]
 
-    console.log("keyprovider",this.keyProvider)
     this.orejs = new Orejs({
       httpEndpoint: config.oreNetworkUri,
       keyProvider: this.keyProvider,
       oreAuthAccountName: this.keys.oreAccountName,
       sign: true
     })
+
   }
 
   async getApiVoucherAndRight(apiName) {
     // Call orejs.findInstruments(oreAccountName, activeOnly:true, args:{category:’apiMarket.apiVoucher’, rightName:’xxxx’}) => [apiVouchers]
     const apiVouchers = await this.orejs.findInstruments(this.keys.oreAccountName, true, VOUCHER_CATEGORY, apiName)
-    console.log(apiVouchers)
     // Choose one voucher - rules to select between vouchers: use cheapest priced and then with the one that has the earliest endDate
     const apiVoucher = apiVouchers.sort((a, b) => {
       const rightA = this.orejs.getRight(a, apiName)
@@ -36,20 +35,21 @@ class Client {
   }
 
   async getUrlAndAccessToken(apiVoucher, apiRight, requestParams) {
-    // Call Verifier contract eos.contract(‘verifier’).then(verifierContract =>      verifierContract.issueAccessToken(apiVoucherId)) =>  url, accessToken
+    // Call Verifier to get access token
+    const signature = await this.orejs.signVoucher(apiVoucher)
     const options = {
       method: 'POST',
       body: JSON.stringify({
         requestParams: requestParams,
         rightName: apiRight.right_name,
-        signature: this.orejs.signVoucher(apiVoucher),
+        signature: signature,
         voucherId: apiVoucher.id
       }),
       headers: {
         'Content-Type': 'application/json'
       }
     }
-
+    
     const result= await fetch(VERIFIER_URI, options)
     
     const {endpoint, oreAccessToken, method} = await result.json()
