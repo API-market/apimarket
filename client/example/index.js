@@ -9,8 +9,8 @@ const run = async () => {
     keyFilePath: process.env.KEY_FILE_PATH
   })
 
-  const apiName = "hadron-contest-1"
-  const data = {"query":"{ spaceTelescope(image:\"https://cdn.spacetelescope.org/archives/images/thumb300y/potw1452a.jpg\") {results} }"}
+  const apiName = "io.hadron.contest-2018-07"
+  const data = {"imageurl":"jc9r05010_drz_small.jpg"}
 
   try {
     const response = await client.fetch(apiName, data)

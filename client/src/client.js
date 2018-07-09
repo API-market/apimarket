@@ -4,8 +4,8 @@ const {Orejs, crypto} = require('orejs')
 const ecc = require('eosjs-ecc')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const VERIFIER_ACCOUNT_NAME = "verifier.ore"
-//const VERIFIER_URI = "https://verifier-staging-dot-open-rights-exchange.appspot.com/verify"
-const VERIFIER_URI = "http://localhost:8080/verify"
+const VERIFIER_URI = "https://verifier-staging-dot-open-rights-exchange.appspot.com/verify"
+
 class Client {
   constructor(config) {
     this.config = config
@@ -17,6 +17,33 @@ class Client {
       oreAuthAccountName: this.keys.oreAccountName,
       sign: true
     })
+
+  }
+
+  async getOptions(httpMethod, oreAccessToken, requestParams){
+    if(httpMethod == "post"){
+      const options =  {
+        method: httpMethod,
+        body: JSON.stringify(requestParams),
+        headers: {
+          'Content-Type': 'application/json',
+          'Ore-Access-Token': oreAccessToken
+        }
+      }
+      return options
+    }
+    else
+    {
+      const options =  {
+        method: httpMethod,
+        query: JSON.stringify(requestParams),
+        headers: {
+          'Content-Type': 'application/json',
+          'Ore-Access-Token': oreAccessToken
+        }
+      }
+      return options
+    }
 
   }
 
@@ -57,15 +84,7 @@ class Client {
 
   async callApiEndpoint(url, httpMethod, requestParams, oreAccessToken) {
     // Makes request to url with accessToken marked ore-authorization in header and returns results
-    const options =  {
-      method: httpMethod,
-      body: JSON.stringify(requestParams),
-      headers: {
-        'Content-Type': 'application/json',
-        'Ore-Access-Token': oreAccessToken
-      }
-    }
-
+    const options = await this.getOptions(httpMethod, oreAccessToken, requestParams)
     const response = await fetch(url, options)
     return response
   }

@@ -79,9 +79,14 @@ class Server {
   
   checkHash() {
     return async (req, res, next) => {
-      const requestParams = req.body
+        let requestParams
+        if(JSON.stringify(req.query) === JSON.stringify({})){
+          requestParams = req.body
+        } else{
+          requestParams = req.query
+        }
+        
       const reqParamHash = req.reqParamHash
-
       try {
         const sortedReqParams = sortJson(requestParams)
     

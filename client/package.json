@@ -1,6 +1,6 @@
 {
   "name": "@apimarket/apimarket",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Client library for api.market",
   "main": "./dist/index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "cookie-parse": "^0.4.0",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
-    "eosjs-ecc": "^4.0.1",
+    "eosjs-ecc": "^4.0.2",
     "express": "^4.16.3",
     "express-async-handler": "^1.1.1",
     "jsonwebtoken": "^8.3.0",
