@@ -1,17 +1,16 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
 const {Orejs, crypto} = require('orejs')
-
+const ecc = require('eosjs-ecc')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const VERIFIER_ACCOUNT_NAME = "verifier.ore"
-const VERIFIER_URI = "https://verifier-staging-dot-open-rights-exchange.appspot.com/verify"
-
+//const VERIFIER_URI = "https://verifier-staging-dot-open-rights-exchange.appspot.com/verify"
+const VERIFIER_URI = "http://localhost:8080/verify"
 class Client {
   constructor(config) {
     this.config = config
     this.keys = JSON.parse(fs.readFileSync(__dirname + config.keyFilePath))
     this.keyProvider = [crypto.decrypt(this.keys.privateKey.toString(), this.keys.walletPassword)]
-
     this.orejs = new Orejs({
       httpEndpoint: config.oreNetworkUri,
       keyProvider: this.keyProvider,
@@ -36,7 +35,7 @@ class Client {
 
   async getUrlAndAccessToken(apiVoucher, apiRight, requestParams) {
     // Call Verifier to get access token
-    const signature = await this.orejs.signVoucher(apiVoucher)
+    const signature = await this.orejs.signVoucher(apiVoucher.id)
     const options = {
       method: 'POST',
       body: JSON.stringify({
