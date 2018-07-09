@@ -9,7 +9,10 @@ const run = async () => {
     keyFilePath: process.env.KEY_FILE_PATH
   })
 
+  //api to access
   const apiName = "io.hadron.contest-2018-07"
+  
+  //request data
   const data = {"imageurl":"jc9r05010_drz_small.jpg"}
 
   try {
