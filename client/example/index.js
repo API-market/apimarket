@@ -11,7 +11,7 @@ const run = async () => {
 
   //api to access
   const apiName = "io.hadron.contest-2018-07"
-  
+
   //request data
   const data = {"imageurl":"jc9r05010_drz_small.jpg"}
 
