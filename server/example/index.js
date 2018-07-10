@@ -1,3 +1,4 @@
+require('newrelic')
 require('dotenv').config()
 const {Server} = require('../index')
 
