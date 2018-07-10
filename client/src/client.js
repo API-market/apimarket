@@ -20,9 +20,10 @@ class Client {
 
   }
 
-  async getOptions(httpMethod, oreAccessToken, requestParams){
+  async getOptions(endpoint, httpMethod, oreAccessToken, requestParams){
     let options
-    if(httpMethod == "post"){
+    let url
+    if(httpMethod.toLowerCase() == "post"){
       options =  {
         method: httpMethod,
         body: JSON.stringify(requestParams),
@@ -31,19 +32,21 @@ class Client {
           'Ore-Access-Token': oreAccessToken
         }
       }
+      url = endpoint
     }
     else
     {
       options =  {
         method: httpMethod,
-        query: JSON.stringify(requestParams),
         headers: {
           'Content-Type': 'application/json',
           'Ore-Access-Token': oreAccessToken
         }
       }
+      url = new URL(endpoint)
+      Object.keys(requestParams).forEach(key => url.searchParams.append(key, requestParams[key]))
     }
-    return options
+    return {url,options}
   }
 
   async getApiVoucherAndRight(apiName) {
@@ -81,9 +84,9 @@ class Client {
     return {endpoint, oreAccessToken, method}
   }
 
-  async callApiEndpoint(url, httpMethod, requestParams, oreAccessToken) {
+  async callApiEndpoint(endpoint, httpMethod, requestParams, oreAccessToken) {
     // Makes request to url with accessToken marked ore-authorization in header and returns results
-    const options = await this.getOptions(httpMethod, oreAccessToken, requestParams)
+    const {url, options} = await this.getOptions(endpoint, httpMethod, oreAccessToken, requestParams)
     const response = await fetch(url, options)
     return response
   }

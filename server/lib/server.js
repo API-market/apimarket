@@ -1,14 +1,17 @@
+require('dotenv').config()
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const express = require('express')
 const fetch = require('node-fetch')
-const fs = require('fs')
+const honey = require(__dirname + "/honey")
+const analyticsEvent = require(__dirname + "/segment")
 const logger = require('morgan')
 const http = require('http')
 const ecc = require('eosjs-ecc')
 const jwt = require('jsonwebtoken')
 const sortJson = require('sort-json')
 const ORE_PUBLIC_KEY = ''
+const Base64 = require('js-base64').Base64;
 
 class Server {
   constructor(verifierPublicKey) {
@@ -19,6 +22,7 @@ class Server {
     const app = express()
 
     app.use(logger('dev'))
+    app.use(honey())
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(cookieParser())
@@ -57,6 +61,16 @@ class Server {
     return async (req, res, next) => {
       const verifierPublicKey = this.verifierPublicKey.replace(/\\n/g, '\n')
       const accessToken = req.headers['ore-access-token']
+      const accessTokenHash = ecc.sha256(JSON.stringify(accessToken))
+      const ip = req.connection.remoteAddress || req.headers['x-forwarded-for']
+
+      try{
+        analyticsEvent(ip,"request details", {accessTokenHash})
+      } catch (e) {
+        throw e
+      }
+
+      //hash the access token and make that the user id in the segment
       try {
         const payload = jwt.verify(accessToken, verifierPublicKey, {
           algorithms: ["ES256"]
@@ -106,6 +120,7 @@ class Server {
   middlewareCheckTokenHash() {
     return this.checkHash()
   }
+  // TODO: change the middleware name and combine them
   async httpServer(handler) {
     const middlewareVerifyJwt = await this.middlewareVerifyJwt()
     const middlewareCheckTokenHash = await this.middlewareCheckTokenHash()

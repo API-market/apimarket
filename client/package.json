@@ -1,6 +1,6 @@
 {
   "name": "@apimarket/apimarket",
-  "version": "0.7.1",
+  "version": "0.7.3",
   "description": "Client library for api.market",
   "main": "./dist/index.js",
   "scripts": {
