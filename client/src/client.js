@@ -21,8 +21,9 @@ class Client {
   }
 
   async getOptions(httpMethod, oreAccessToken, requestParams){
+    let options
     if(httpMethod == "post"){
-      const options =  {
+      options =  {
         method: httpMethod,
         body: JSON.stringify(requestParams),
         headers: {
@@ -30,11 +31,10 @@ class Client {
           'Ore-Access-Token': oreAccessToken
         }
       }
-      return options
     }
     else
     {
-      const options =  {
+      options =  {
         method: httpMethod,
         query: JSON.stringify(requestParams),
         headers: {
@@ -42,9 +42,8 @@ class Client {
           'Ore-Access-Token': oreAccessToken
         }
       }
-      return options
     }
-
+    return options
   }
 
   async getApiVoucherAndRight(apiName) {
