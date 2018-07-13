@@ -1,13 +1,12 @@
 {
-  "name": "@apimarket/apimarket",
-  "version": "0.5.23",
-  "description": "This repository contains a library for interacting with the AIKON marketplace.",
+  "name": "@apimarket/apimarket-server",
+  "version": "0.7.4",
+  "description": "Server library for api.market",
   "main": "./dist/index.js",
   "scripts": {
     "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles",
-    "copyfiles": "cp ./example/client/config.json ./dist/example/client && cp ./example/server/config.json ./dist/example/server",
-    "example:server": "node --trace-warnings ./dist/example/server/index.js",
-    "example:client": "node --trace-warnings ./dist/example/client/index.js",
+    "copyfiles": "cp ./example/.env ./dist/example/",
+    "example:client": "node --trace-warnings ./dist/example/server/index.js",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/api-market/apimarket.git"
   },
-  "author": "Aikon (www.aikon.com)",
+  "author": "api.market",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/api-market/apimarket/issues"
@@ -23,23 +22,26 @@
   "homepage": "https://github.com/api-market/apimarket#readme",
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.42",
+    "analytics-node": "^3.3.0",
     "axios": "^0.16.2",
+    "base-64": "^0.1.0",
     "body-parser": "^1.18.2",
-    "connect": "^3.6.6",
     "cookie-parse": "^0.4.0",
     "cookie-parser": "^1.4.3",
-    "ethereumjs-util": "^5.1.5",
+    "dotenv": "^6.0.0",
+    "eosjs-ecc": "^4.0.1",
     "express": "^4.16.3",
-    "express-async-handler": "^1.1.1",
-    "ipfs-mini": "^1.1.2",
-    "keythereum": "^1.0.2",
+    "js-base64": "^2.4.5",
+    "jsonwebtoken": "^8.3.0",
+    "libhoney": "^1.1.1",
     "morgan": "^1.9.0",
-    "open-rights-exchange": "git+https://apim-npmbot:LtT3pgcj9YAxMrNN@github.com/api-market/protocol.git#dev",
+    "newrelic": "^4.3.0",
+    "node-fetch": "^2.1.2",
+    "sort-json": "^2.0.0",
     "tslint": "^5.9.1",
     "typescript": "^2.8.1",
     "url-parse": "^1.2.0",
-    "url-polyfill": "^1.0.11",
-    "web3": "^0.20.6"
+    "url-polyfill": "^1.0.11"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.42",
