@@ -1,9 +1,10 @@
 const libhoney = require('libhoney').default;
+const base64 = require('base-64')
 module.exports = function() {
 
   let honey = new libhoney({
-    writeKey: "7c1896b80705f9dc4ed37524343cd0e",
-    dataset: "apimarket-server-library"
+    writeKey: base64.decode("N2MxODk2YjgwNzA1ZjlkYzRlZDM3NTI0MzQzY2QwZQ=="),
+    dataset: base64.decode("YXBpbWFya2V0LXNlcnZlci1saWJyYXJ5")
   });
 
   return function(req, res, next) {
