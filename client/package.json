@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles",
-    "copyfiles": "cp ./example/.env ./dist/example/client && cp ./example/apimarket_keyfile.json ./dist/example/client",
+    "copyfiles": "cp ./example/config.json ./dist/example/",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -28,7 +28,6 @@
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "express-async-handler": "^1.1.1",
     "jsonwebtoken": "^8.3.0",
     "morgan": "^1.9.0",
     "node-fetch": "^2.1.2",

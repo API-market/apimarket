@@ -1,23 +1,51 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
 const {Orejs, crypto} = require('orejs')
+const { URL } = require('url')
 const ecc = require('eosjs-ecc')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
-const VERIFIER_ACCOUNT_NAME = "verifier.ore"
-const VERIFIER_URI = "https://verifier-staging-dot-open-rights-exchange.appspot.com/verify"
+const defaultConfig =  "../../../../config.json"
 
 class Client {
   constructor(config) {
-    this.config = config
-    this.keys = JSON.parse(fs.readFileSync(__dirname + config.keyFilePath))
-    this.keyProvider = [crypto.decrypt(this.keys.privateKey.toString(), this.keys.walletPassword)]
-    this.orejs = new Orejs({
-      httpEndpoint: config.oreNetworkUri,
-      keyProvider: this.keyProvider,
-      oreAuthAccountName: this.keys.oreAccountName,
-      sign: true
-    })
+    // config path defaults to the current working directory
+    if(config){
+      this.config = require(config)
+    }
+    else{
+      this.config = require(defaultConfig)
+    }
 
+    this.keyProvider = [crypto.decrypt(this.config.privateKey.toString(), this.config.walletPassword)]
+    this.verifier = this.config.verifier
+  }
+
+  connect() {
+    return new Promise((resolve, reject) => {
+
+      (async() => {  
+        try{
+          const oreNetworkData = await fetch(this.verifier+"/discovery")
+          const { oreNetworkUri } = await oreNetworkData.json()
+          this.oreNetworkUri = oreNetworkUri
+          
+          const oreInfoEndpoint = oreNetworkUri+"/v1/chain/get_info"
+          const oreNetworkInfo = await fetch(oreInfoEndpoint) 
+          const { chain_id } = await oreNetworkInfo.json()
+          this.OreChainId = chain_id
+        } catch (e){
+          reject(e)
+        }
+        this.orejs = new Orejs({
+          httpEndpoint: this.oreNetworkUri,
+          chainId: this.OreChainId,
+          keyProvider: this.keyProvider,
+          oreAuthAccountName: this.config.oreAccountName,
+          sign: true
+        })
+        resolve(this)
+      })();
+    });    
   }
 
   async getOptions(endpoint, httpMethod, oreAccessToken, requestParams){
@@ -51,7 +79,7 @@ class Client {
 
   async getApiVoucherAndRight(apiName) {
     // Call orejs.findInstruments(oreAccountName, activeOnly:true, args:{category:’apiMarket.apiVoucher’, rightName:’xxxx’}) => [apiVouchers]
-    const apiVouchers = await this.orejs.findInstruments(this.keys.oreAccountName, true, VOUCHER_CATEGORY, apiName)
+    const apiVouchers = await this.orejs.findInstruments(this.config.oreAccountName, true, VOUCHER_CATEGORY, apiName)
     // Choose one voucher - rules to select between vouchers: use cheapest priced and then with the one that has the earliest endDate
     const apiVoucher = apiVouchers.sort((a, b) => {
       const rightA = this.orejs.getRight(a, apiName)
@@ -78,7 +106,7 @@ class Client {
       }
     }
     
-    const result= await fetch(VERIFIER_URI, options)
+    const result= await fetch(this.verifier+"/verify", options)
     
     const {endpoint, oreAccessToken, method} = await result.json()
     return {endpoint, oreAccessToken, method}
@@ -94,16 +122,17 @@ class Client {
   async fetch(apiName, requestParams) {
     console.info("Fetch:", apiName)
     const {apiVoucher, apiRight} = await this.getApiVoucherAndRight(apiName)
-    console.info("Voucher:", apiVoucher)
-    console.info("Right:", apiRight)
+    console.info("Voucher purchased :", apiVoucher)
+    console.info("Right to be used :", apiRight)
 
     // Call cpuContract.approve(oreAccountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
-    await this.orejs.approveCpu(this.keys.oreAccountName, VERIFIER_ACCOUNT_NAME, apiRight.price_in_cpu)
-    console.info("Approved!")
+    await this.orejs.approveCpu(this.config.oreAccountName, this.config.verifierAccountName, apiRight.price_in_cpu)
+    console.info("CPU approved for the verifier!")
 
     // Call the verifier to get the access token
     const {endpoint, oreAccessToken, method} = await this.getUrlAndAccessToken(apiVoucher, apiRight, requestParams)
     console.info("Url:", endpoint)
+    console.info("OreAccessToken", oreAccessToken)
 
     // Call the api
     const response = await this.callApiEndpoint(endpoint, method, requestParams, oreAccessToken)

@@ -3,7 +3,6 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const express = require('express')
 const fetch = require('node-fetch')
-const honey = require(__dirname + "/honey")
 const analyticsEvent = require(__dirname + "/segment")
 const logger = require('morgan')
 const http = require('http')
@@ -22,7 +21,6 @@ class Server {
     const app = express()
 
     app.use(logger('dev'))
-    app.use(honey())
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(cookieParser())
@@ -112,7 +110,7 @@ class Server {
           throw e
         }
       } catch (e) {
-        res.status(401).json({message: "unauthorized"})
+        res.status(401).json({message: "the request parameters sent to the api server are differnet from thise sent to the verifier"})
       }
     }
   }
@@ -120,6 +118,7 @@ class Server {
   middlewareCheckTokenHash() {
     return this.checkHash()
   }
+
   // TODO: change the middleware name and combine them
   async httpServer(handler) {
     const middlewareVerifyJwt = await this.middlewareVerifyJwt()
@@ -129,6 +128,7 @@ class Server {
     const server = http.createServer(app);
     return server
   }
+
 }
 
 module.exports = {

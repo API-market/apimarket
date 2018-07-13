@@ -1,5 +1,6 @@
 'use strict'
 require('dotenv').config()
+const base64 = require('base-64')
 /**
  * New Relic agent configuration.
  *
@@ -14,7 +15,7 @@ exports.config = {
   /**
    * Your New Relic license key.
    */
-  license_key: "21954e8fff736e641f375cae5e467a4d1a547591",
+  license_key: base64.decode("MjE5NTRlOGZmZjczNmU2NDFmMzc1Y2FlNWU0NjdhNGQxYTU0NzU5MQ=="),
   logging: {
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing
