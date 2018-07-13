@@ -112,7 +112,7 @@ class Server {
           throw e
         }
       } catch (e) {
-        res.status(401).json({message: "unauthorized"})
+        res.status(401).json({message: "the request parameters sent to the api server are differnet from thise sent to the verifier"})
       }
     }
   }
@@ -120,6 +120,7 @@ class Server {
   middlewareCheckTokenHash() {
     return this.checkHash()
   }
+
   // TODO: change the middleware name and combine them
   async httpServer(handler) {
     const middlewareVerifyJwt = await this.middlewareVerifyJwt()
@@ -129,6 +130,7 @@ class Server {
     const server = http.createServer(app);
     return server
   }
+
 }
 
 module.exports = {
