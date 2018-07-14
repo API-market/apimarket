@@ -6,6 +6,6 @@
 	"author": "api.market",
 	"license": "MIT",
 	"dependencies": {
-		"@apimarket/apimarket": "^0.7.8"
+		"@apimarket/apimarket": "^0.7.9"
 	}
 }
