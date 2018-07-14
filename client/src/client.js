@@ -17,9 +17,9 @@ class ApiMarketClient {
   //load config data from file and valiate entries
   loadConfig(config) {
 
-    //make sure file exists
+    //make sure config data exists
     if (!config) {
-      throw new Error(`Config file (apimarket_config.json) is missing and empty.`)
+      throw new Error(`Config data is missing. You can downloaded the file (from api.market) with the required settings for an api.`)
     }
 
     var {walletPassword, accountName, accountPrivateKeyEncrypted, verifier, verifierAccountName} = config
