@@ -18,6 +18,7 @@ Only valid requests will be served
 
 ```javascript
 const { apiMarketRequestValidator } = require('@apimarket/apimarket-server')
+
 app.use(apiMarketRequestValidator())
 
 ```
