@@ -1,11 +1,11 @@
 {
   "name": "@apimarket/apimarket-server",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Server library for api.market",
   "main": "./dist/index.js",
   "scripts": {
     "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles",
-    "copyfiles": "cp ./example/.env ./dist/example/",
+    "copyfiles": "cp ./example/.env.example ./dist/example/",
     "example:client": "node --trace-warnings ./dist/example/server/index.js",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
