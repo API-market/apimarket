@@ -1,11 +1,11 @@
 {
   "name": "@apimarket/apimarket",
-  "version": "0.7.5",
+  "version": "0.7.8",
   "description": "Client library for api.market",
   "main": "./dist/index.js",
   "scripts": {
     "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles",
-    "copyfiles": "cp ./example/config.example.json ./dist/example/",
+    "copyfiles": "cp ./example/apimarket_config.example.json ./example/package.json ./dist/example/",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
