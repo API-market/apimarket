@@ -6,7 +6,7 @@ const rollbarConfig = {
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
-        environment: process.env.NODE_ENV || "development"
+        environment: "development"
     }
 };
 

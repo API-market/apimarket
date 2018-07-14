@@ -1,5 +1,5 @@
-const {Server} = require('./lib/server')
+const { apiMarketRequestValidator } = require('./lib/server')
 
 module.exports = {
-  Server
+  apiMarketRequestValidator
 }
