@@ -16,16 +16,10 @@ VERIFIER_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\nMFkw....==\n-----END PUBLIC KEY
 
 Only valid requests will be served
 
-```
-const {Server} = require('@apimarket/apimarket-server'))
+```javascript
+const { apiMarketRequestValidator } = require('@apimarket/apimarket-server')
+app.use(apiMarketRequestValidator())
 
-const PORT = process.env.PORT || 8080
-
-let server = new Server(process.env.VERIFIER_PUBLIC_KEY)
-
-const httpServer = await server.httpServer(handler)
-
-httpServer.listen(port)
 ```
 
 # Publish NPM Package
