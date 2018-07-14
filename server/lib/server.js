@@ -1,97 +1,15 @@
+require('newrelic')
 require('dotenv').config()
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const express = require('express')
-const fetch = require('node-fetch')
 const analyticsEvent = require(__dirname + "/segment")
-const logger = require('morgan')
-const http = require('http')
 const ecc = require('eosjs-ecc')
 const jwt = require('jsonwebtoken')
 const sortJson = require('sort-json')
-const ORE_PUBLIC_KEY = ''
-const Base64 = require('js-base64').Base64;
+const { logError } = require('./logging')
 
-class Server {
-  constructor(verifierPublicKey) {
-    this.verifierPublicKey = verifierPublicKey
-  }
-
-  buildServer(handler, middlewareDecodeJwt, middlewareCheckTokenHash) {
-    const app = express()
-
-    app.use(logger('dev'))
-    app.use(bodyParser.json())
-    app.use(bodyParser.urlencoded({ extended: false }))
-    app.use(cookieParser())
-
-    app.use(middlewareDecodeJwt)
-
-    app.use(middlewareCheckTokenHash)
-
-    app.post('/', handler)
-
-    // catch 404 and forward to error handler
-    app.use(function(req, res, next) {
-      var err = new Error('Not Found')
-      err.status = 404
-      next(err)
-    })
-
-    // error handler
-    app.use(function(err, req, res, next) {
-      // set locals, only providing error in development
-      res.locals.message = err.message
-      res.locals.error = req.app.get('env') === 'development' ? err : {}
-
-      // render the error page
-      res.status(err.status || 500)
-      res.json({
-        message: err.message,
-        error: err
-      })
-    })
-
-    return app
-  }
-
-  verifyJWT() {
-    return async (req, res, next) => {
-      const verifierPublicKey = this.verifierPublicKey.replace(/\\n/g, '\n')
-      const accessToken = req.headers['ore-access-token']
-      const accessTokenHash = ecc.sha256(JSON.stringify(accessToken))
-      const ip = req.connection.remoteAddress || req.headers['x-forwarded-for']
-
-      try{
-        analyticsEvent(ip,"request details", {accessTokenHash})
-      } catch (e) {
-        throw e
-      }
-
-      //hash the access token and make that the user id in the segment
-      try {
-        const payload = jwt.verify(accessToken, verifierPublicKey, {
-          algorithms: ["ES256"]
-        })
-        if(payload){
-          req.reqParamHash = payload["reqParamHash"]
-          next()
-        } else {
-          throw e
-        }
-      } catch (e) {
-        res.status(401).json({message: "unauthorized"})
-      }
-    }
-  }
-
-  middlewareVerifyJwt() {
-    return this.verifyJWT()
-  }
-  
-  checkHash() {
+function checkHash() {
     return async (req, res, next) => {
         let requestParams
+        // Check if the hash of the request parameters matches the hash included in the ore access token issued by the verifier
         if(JSON.stringify(req.query) === JSON.stringify({})){
           requestParams = req.body
         } else{
@@ -115,22 +33,43 @@ class Server {
     }
   }
 
-  middlewareCheckTokenHash() {
-    return this.checkHash()
+function apiMarketRequestValidator() {
+    return async (req, res, next) => {
+      const verifierPublicKey = process.env.VERIFIER_PUBLIC_KEY.replace(/\\n/g, '\n')
+    try{
+      // Check if access token exists
+      if(req.headers['ore-access-token']){
+        const accessToken = await req.headers['ore-access-token']
+        const accessTokenHash = ecc.sha256(JSON.stringify(accessToken))
+  
+        const ip = req.connection.remoteAddress || req.headers['x-forwarded-for']
+        const payload = jwt.verify(accessToken, verifierPublicKey, {
+            algorithms: ["ES256"]
+          })
+        
+      // Check if the access token is valid
+        if(payload){
+            req.reqParamHash = payload["reqParamHash"]
+            checkHash()
+            next()
+        } else {
+            res.status(401).json({message:"invalid api market access token"})
+        }
+        analyticsEvent(ip,"request details", {accessTokenHash})
+      }
+      else{
+        res.status(401).json({message:"api market access token not found"})
+      
+      }   
+    }
+    catch (e) {
+      logError("Error", e)
+    }
   }
-
-  // TODO: change the middleware name and combine them
-  async httpServer(handler) {
-    const middlewareVerifyJwt = await this.middlewareVerifyJwt()
-    const middlewareCheckTokenHash = await this.middlewareCheckTokenHash()
-    const middlewares = [middlewareVerifyJwt, middlewareCheckTokenHash]
-    const app = this.buildServer(handler, ...middlewares)
-    const server = http.createServer(app);
-    return server
-  }
-
 }
-
+  
 module.exports = {
-  Server
+  apiMarketRequestValidator
 }
+
+

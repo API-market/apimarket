@@ -1,18 +1,29 @@
-require('newrelic')
 require('dotenv').config()
-const {Server} = require('../index')
+const express = require('express')
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const { apiMarketRequestValidator } = require('@apimarket/apimarket-server')
 
+const app = express()
 const PORT = process.env.PORT || 8080
 
-const run = async () => {
-  let server = new Server(process.env.VERIFIER_PUBLIC_KEY)
 
-  const handler = async (req, res) => {
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(apiMarketRequestValidator())
+
+const handler = async (req, res) => {
     res.json({x: req.body.x + 1})
   }
 
-  const httpServer = await server.httpServer(handler)
-  httpServer.listen(PORT, () => console.log(`Server listening on port: ${PORT}`))
-}
+app.post('/', handler)
 
-run()
+   // catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found')
+    err.status = 404
+    next(err)
+})
+
+app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`))
