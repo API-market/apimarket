@@ -27,7 +27,6 @@
     "base-64": "^0.1.0",
     "dotenv": "^6.0.0",
     "eosjs-ecc": "^4.0.1",
-    "js-base64": "^2.4.5",
     "jsonwebtoken": "^8.3.0",
     "newrelic": "^4.3.0",
     "rollbar": "^2.4.2",
