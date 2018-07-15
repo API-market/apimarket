@@ -34,10 +34,10 @@ const config = require("apimarket_config.json");
 let apimarketClient = new ApiMarketClient(config);
 await apimarketClient.connect()
 
-//call api - passing in the data it needs
+//call api - passing in the parameters it needs
 //you specify the api to call using it's unique name registered on the ORE blockchain
-const data = {"imageurl":"jc9r05010_drz_small.jpg"}
-const response = await apimarketClient.fetch("cloud.hadron.contest-2018-07", data)
+const params = {"imageurl":"jc9r05010_drz_small.jpg"}
+const response = await apimarketClient.fetch("cloud.hadron.contest-2018-07", params)
 
 //View results
 console.log(response)

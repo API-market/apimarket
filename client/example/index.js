@@ -12,8 +12,8 @@ const run = async () => {
     const apiName = "cloud.hadron.contest-2018-07"
 
     //call api - passing in the data it needs
-    const data = {"imageurl":"jc9r05010_drz_small.jpg"}
-    const response = await apimarketClient.fetch(apiName, data)
+    const params = {"imageurl":"jc9r05010_drz_small.jpg"}
+    const response = await apimarketClient.fetch(apiName, params)
     console.log(JSON.stringify(response, null, 2))
 
   } 
