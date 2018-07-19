@@ -1,26 +1,25 @@
-const dotenv = require("dotenv")
-const {Client} = require('../index')
-
-dotenv.config({path: './.env'})
+//const {ApiMarketClient} = require('../index')  // uncomment for debugging
+const {ApiMarketClient} = require('@apimarket/apimarket')
+const configFile = require("../example/apimarket_config.json");
 
 const run = async () => {
-  let client = new Client("../example/config.json");
-
-  await client.connect()
-
-  //api to access
-  const apiName = "cloud.hadron.contest-2018-07"
-
-  //request data
-  const data = {"imageurl":"jc9r05010_drz_small.jpg"}
-
   try {
-    const response = await client.fetch(apiName, data)
+    //Config to apimarketClient and connect to ORE blockchain
+    let apimarketClient = new ApiMarketClient(configFile);
+    await apimarketClient.connect()
+
+    //specify the api to call using it's unique name registered on the ORE blockchain
+    const apiName = "cloud.hadron.contest-2018-07"
+
+    //call api - passing in the data it needs
+    const params = {"imageurl":"jc9r05010_drz_small.jpg"}
+    const response = await apimarketClient.fetch(apiName, params)
     console.log(JSON.stringify(response, null, 2))
-  } catch(err) {
-    console.error(err)
+
+  } 
+  catch(error) {
+    console.error(error)
   }
-  process.exit(0)
 }
 
 run()

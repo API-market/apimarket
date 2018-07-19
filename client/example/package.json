@@ -1,0 +1,11 @@
+{
+	"name": "@apimarket/apimarket-client-example",
+	"version": "1.0.0",
+	"description": "Client library example for api.market",
+	"main": "index.js",
+	"author": "api.market",
+	"license": "MIT",
+	"dependencies": {
+		"@apimarket/apimarket": "^0.7.9"
+	}
+}

@@ -8,35 +8,47 @@ It wraps the [Open Rights Exchange protocol](https://github.com/api-market/ore-p
 
 ## Client
 
-The `config.json` is the keyfile which stores the client wallet password, account name, encrypted  private key and public key. It also stores the address and ore account name of the verifier.
+The `apimarket_config.json` is the keyfile which stores your encrypted wallet information and the address to connect to the ORE blockchain. You can download this file from the api.market website. After you download it, you'll need to add the password you used to create the wallet on api.market. 
+
+IMPORTANT: We don't have your wallet's unencrytped private key and we never store your wallet password.
 
 An example configuration file looks like:
-
 ```json
 {
     "walletPassword": "PW5Kb...",
-    "oreAccountName": "sjvch...",
-    "privateKey": "U2Fsd...",
-    "publicKey": "EOS74..."
+    "accountName": "sjvch...",
+    "accountPrivateKeyEncrypted": "U2Fsd...",
+    "publicKey": "EOS74...",
+    "verifier": "https://verifier....com",
+    "verifierAccountName": "verifier.ore"
 }
 ```
 
-Then, in your client code:
+To call an ORE-enabled API, use the config file, connect to the ORE blockchain and make the request. Here is some fully-functional sample code:
 
 ```javascript
-const Client = require('@apimarket/apimarket')
+const { ApiMarketClient } = require('@apimarket/apimarket')
+const config = require("apimarket_config.json");
 
-const client = new Client()
+//Setup and connect to the blockchain using your wallet and password in the config
+let apimarketClient = new ApiMarketClient(config);
+await apimarketClient.connect()
 
-await client.connect()
+//call api - passing in the parameters it needs
+//you specify the api to call using it's unique name registered on the ORE blockchain
+const params = {"imageurl":"jc9r05010_drz_small.jpg"}
+const response = await apimarketClient.fetch("cloud.hadron.contest-2018-07", params)
 
-const result = await client.fetch("io.hadron.spaceTelescope", hadronRequest)
-console.log(result)
+//View results
+console.log(response)
+
 ```
 
 # Publish NPM Package
 
-- Update version number in package.json
+To publish an updated package, first log-in to npmjs with `npm login` (using account apimarket)
+
+- Update version number in package.json (and example's package.json)
 - `npm publish --tag staging` - to publish staging version
 - `npm publish` - to publish the production version
 

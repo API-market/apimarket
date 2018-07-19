@@ -1,5 +1,5 @@
-const {Client} = require('./src/client')
+const {ApiMarketClient} = require('./src/client')
 
 module.exports = {
-  Client
+  ApiMarketClient
 }
