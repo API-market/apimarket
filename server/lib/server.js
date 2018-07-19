@@ -28,15 +28,20 @@ function checkHash() {
           throw e
         }
       } catch (e) {
-        res.status(401).json({message: "the request parameters sent to the api server are differnet from thise sent to the verifier"})
+        return res.status(401).json({message: "the request parameters sent to the api server are differnet from thise sent to the verifier"})
       }
     }
   }
 
 function apiMarketRequestValidator() {
-    return async (req, res, next) => {
-      const verifierPublicKey = process.env.VERIFIER_PUBLIC_KEY.replace(/\\n/g, '\n')
+    return async (req, res, next) => {     
     try{
+      if(process.env.VERIFIER_PUBLIC_KEY){
+        const verifierPublicKey = process.env.VERIFIER_PUBLIC_KEY.replace(/\\n/g, '\n')
+      }
+      else{
+        return res.status(401).json({message:"verifier public key not found. Pass in verifier public key as an"})
+      }
       // Check if access token exists
       if(req.headers['ore-access-token']){
         const accessToken = await req.headers['ore-access-token']
@@ -53,12 +58,12 @@ function apiMarketRequestValidator() {
             checkHash()
             next()
         } else {
-            res.status(401).json({message:"invalid api market access token"})
+            return res.status(401).json({message:"invalid api market access token"})
         }
         analyticsEvent(ip,"request details", {accessTokenHash})
       }
       else{
-        res.status(401).json({message:"api market access token not found"})
+        return res.status(401).json({message:"api market access token not found"})
       
       }   
     }
