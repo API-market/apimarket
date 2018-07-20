@@ -36,18 +36,15 @@ function checkHash() {
 function apiMarketRequestValidator() {
     return async (req, res, next) => {     
     try{
-      if(process.env.VERIFIER_PUBLIC_KEY){
-        const verifierPublicKey = process.env.VERIFIER_PUBLIC_KEY.replace(/\\n/g, '\n')
-      }
-      else{
+      if(!process.env.VERIFIER_PUBLIC_KEY){
         return res.status(401).json({message:"verifier public key not found. Pass in verifier public key as an"})
       }
       // Check if access token exists
       if(req.headers['ore-access-token']){
         const accessToken = await req.headers['ore-access-token']
         const accessTokenHash = ecc.sha256(JSON.stringify(accessToken))
-  
         const ip = req.connection.remoteAddress || req.headers['x-forwarded-for']
+        const verifierPublicKey = process.env.VERIFIER_PUBLIC_KEY.replace(/\\n/g, '\n')
         const payload = jwt.verify(accessToken, verifierPublicKey, {
             algorithms: ["ES256"]
           })
