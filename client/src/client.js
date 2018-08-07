@@ -51,7 +51,7 @@ class ApiMarketClient {
     if(!verifier || !verifierAccountName) {errorMessage += `\n --> Missing verifier or verifierAccountName. Download the API's config file from api.market - it will include these values.`} 
 
     if(errorMessage != '') {
-      throw new Error(`Config file (apimarket_config.json) is missing or has bad values. ${errorMessage}`)
+      throw new Error(`Config file (e.g., apimarket_config.json) is missing or has bad values. ${errorMessage}`)
     }
 
     this.config = config
