@@ -91,7 +91,7 @@ function apiMarketRequestValidator() {
         next()
       } else {
         return res.status(401).json({
-          message: "the ore access token is not valid"
+          message: "the ore-access-token is not valid"
         })
       }
     } catch (error) {
