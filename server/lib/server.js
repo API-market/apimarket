@@ -7,26 +7,48 @@ const {
   logError
 } = require('./logging')
 
-function checkRequestParams(reqParamHash, requestParams) {
+// append url/body to the parameter name to be able to distinguish b/w url and body parameters
+async function getParams(requestParams) {
+  let params = {}
+  let newKey
+  if (requestParams.httpUrlParams) {
+    Object.keys(requestParams.httpUrlParams).forEach(key => {
+      newKey = "urlParam_" + key
+      params[newKey] = requestParams.httpUrlParams[key]
+    })
+  }
+
+  if (requestParams.httpBodyParams) {
+    Object.keys(requestParams.httpBodyParams).forEach(key => {
+      newKey = "bodyParam_" + key
+      params[newKey] = requestParams.httpBodyParams[key]
+    })
+  }
+  return params
+}
+
+async function checkRequestParams(reqParamHash, requestParams) {
   // Check if the hash of the request parameters matches the hash included in the ore access token issued by the verifier
   try {
-    const sortedReqParams = sortJson(requestParams)
+    const params = await getParams(requestParams)
+    const sortedReqParams = sortJson(params)
     const hash = ecc.sha256(JSON.stringify(sortedReqParams))
+
     if (hash === reqParamHash) {
       return true
     } else {
       return false
     }
   } catch (error) {
-    errMsf = ``
-    throw new Error(`${errMsg} ${error}`);
+    errMsg = `problem in creating a hash of the request paramters. Pass in the query and body params in correct format.`
+    throw new Error(`${errMsg} ${error.message}`);
   }
 }
 
-async function checkOreAccessToken(oreAccessToken, requestParams) {
+async function checkOreAccessToken(oreAccessToken, req) {
   try {
-    let errMsg;
-
+    let errMsg
+    let requestParams = {}
     if (!process.env.VERIFIER_PUBLIC_KEY) {
       errMsg = `verifier public key is missing. Provide a valid verifier public key as environment variable`;
       throw new Error(`${errMsg}`);
@@ -39,7 +61,17 @@ async function checkOreAccessToken(oreAccessToken, requestParams) {
       algorithms: ["ES256"]
     })
 
-    return checkRequestParams(payload.reqParamHash, requestParams)
+    if (req.query != undefined) {
+      requestParams.httpUrlParams = req.query
+    }
+
+    if (req.body != undefined) {
+      requestParams.httpBodyParams = req.body
+    }
+
+    const isValid = await checkRequestParams(payload.reqParamHash, requestParams)
+
+    return isValid
   } catch (error) {
     errHead = `invalid ore-access-token `
     if (error.message == 'jwt expired') {
@@ -75,10 +107,8 @@ function apiMarketRequestValidator() {
         throw new Error(`${errMsg}`);
       }
 
-      let requestParams = Object.assign(req.query, req.body)
-
       // Check if access token is valid
-      let ifValid = await checkOreAccessToken(req.headers['ore-access-token'], requestParams)
+      let ifValid = await checkOreAccessToken(req.headers['ore-access-token'], req)
 
       if (ifValid) {
         // record data in segment 
@@ -91,7 +121,7 @@ function apiMarketRequestValidator() {
         next()
       } else {
         return res.status(401).json({
-          message: "the ore-access-token is not valid"
+          message: "ore-access-token is not valid"
         })
       }
     } catch (error) {
