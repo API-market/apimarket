@@ -27,8 +27,8 @@ async function getParams(requestParams) {
   return params
 }
 
+// Check if the hash of the request parameters matches the hash included in the ore access token issued by the verifier
 async function checkRequestParams(reqParamHash, requestParams) {
-  // Check if the hash of the request parameters matches the hash included in the ore access token issued by the verifier
   try {
     const params = await getParams(requestParams)
     const sortedReqParams = sortJson(params)
@@ -45,6 +45,7 @@ async function checkRequestParams(reqParamHash, requestParams) {
   }
 }
 
+// verify ore access token is a valid jwt token signed by the client
 async function checkOreAccessToken(oreAccessToken, req) {
   try {
     let errMsg
@@ -56,7 +57,6 @@ async function checkOreAccessToken(oreAccessToken, req) {
 
     const verifierPublicKey = process.env.VERIFIER_PUBLIC_KEY.replace(/\\n/g, '\n')
 
-    // verify ore access token is a valid jwt token signed by the client
     const payload = await jwt.verify(oreAccessToken, verifierPublicKey, {
       algorithms: ["ES256"]
     })
@@ -91,7 +91,7 @@ async function checkOreAccessToken(oreAccessToken, req) {
   }
 }
 
-//export as a middleware
+// export as a middleware
 function apiMarketRequestValidator() {
   let errMsg;
   return async (req, res, next) => {
