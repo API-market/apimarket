@@ -1,9 +1,13 @@
+/*
+Server wihtout api.market middleware
+Accessing the api.market checkOreAcessToken directly
+*/
 require('dotenv').config()
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const {
-    apiMarketRequestValidator
+    checkOreAccessToken
 } = require('../lib/server')
 
 const app = express()
@@ -15,12 +19,24 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 app.use(cookieParser())
-app.use(apiMarketRequestValidator())
+//app.use(apiMarketRequestValidator())
 
 const handler = async (req, res) => {
-    res.json({
-        x: req.body.x + 1
-    })
+
+    if (!req.headers['ore-access-token']) {
+        return res.status(401).json({
+            message: "ore-access-tokennot found"
+        })
+    }
+    if (checkOreAccessToken(req.headers['ore-access-token'], req)) {
+        return res.json({
+            x: req.body.x + 1
+        })
+    } else {
+        return res.status(401).json({
+            message: "ore-access-tokenis invalid"
+        })
+    }
 }
 
 app.post('/', handler)
