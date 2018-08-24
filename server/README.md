@@ -7,7 +7,7 @@ It wraps the [Open Rights Exchange protocol](https://github.com/api-market/ore-p
 # Usage
 
 ## Server
-There are 2 ways this library can be used. Both of the methods require verifier public key in the following format in the env file
+There are 2 ways to use this library. Both of the methods require verifier public key in the following format in the env file
 
 ```
 VERIFIER_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\nMFkw....==\n-----END PUBLIC KEY-----"
