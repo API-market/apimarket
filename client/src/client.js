@@ -128,7 +128,7 @@ class ApiMarketClient {
   }
 
   // append url/body to the parameter name to be able to distinguish b/w url and body parameters
-  async getParams(requestParams) {
+  getParams(requestParams) {
     let params = {}
     let newKey
     if (requestParams.httpUrlParams) {
@@ -193,7 +193,7 @@ class ApiMarketClient {
 
   async getUrlAndAccessToken(apiVoucher, apiRight, requestParams) {
     // Call Verifier to get access token
-    const params = await this.getParams(requestParams)
+    const params = this.getParams(requestParams)
     const signature = await this.orejs.signVoucher(apiVoucher.id)
     const options = {
       method: 'POST',

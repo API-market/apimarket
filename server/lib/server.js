@@ -8,7 +8,7 @@ const {
 } = require('./logging')
 
 // append url/body to the parameter name to be able to distinguish b/w url and body parameters
-async function getParams(requestParams) {
+function getParams(requestParams) {
   let params = {}
   let newKey
   if (requestParams.httpUrlParams) {
@@ -30,7 +30,7 @@ async function getParams(requestParams) {
 // Check if the hash of the request parameters matches the hash included in the ore access token issued by the verifier
 async function checkRequestParams(reqParamHash, requestParams) {
   try {
-    const params = await getParams(requestParams)
+    const params = getParams(requestParams)
     const sortedReqParams = sortJson(params)
     const hash = ecc.sha256(JSON.stringify(sortedReqParams))
 
