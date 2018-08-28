@@ -123,51 +123,64 @@ class ApiMarketClient {
       const errMsg = `Problem retrieving info from the ORE blockchain. Config file expects an ORE node running here: ${this.oreNetworkUri}. ${error}`
       reject(error)
     }
-
-    //console.log(`oreNetworkUri ${this.oreNetworkUri}   chain_id ${this.OreChainId}`)
   }
 
   // append url/body to the parameter name to be able to distinguish b/w url and body parameters
   getParams(requestParams) {
     let params = {}
     let newKey
-    if (requestParams.httpUrlParams) {
-      Object.keys(requestParams.httpUrlParams).forEach(key => {
+    if (requestParams["http-url-params"] && requestParams["http-body-params"]) {
+      Object.keys(requestParams["http-url-params"]).forEach(key => {
         newKey = "urlParam_" + key
-        params[newKey] = requestParams.httpUrlParams[key]
+        params[newKey] = requestParams["http-url-params"][key]
       })
-    }
-
-    if (requestParams.httpBodyParams) {
-      Object.keys(requestParams.httpBodyParams).forEach(key => {
+      Object.keys(requestParams["http-body-params"]).forEach(key => {
         newKey = "bodyParam_" + key
-        params[newKey] = requestParams.httpBodyParams[key]
+        params[newKey] = requestParams["http-body-params"][key]
       })
+      return params
+    } else {
+      return requestParams
     }
-    return params
   }
 
   async getOptions(endpoint, httpMethod, oreAccessToken, requestParams) {
     let options
     let url
-    let bodyParams
     url = new URL(endpoint)
 
-    if (requestParams.httpBodyParams) {
-      bodyParams = JSON.stringify(requestParams.httpBodyParams)
-    }
-    options = {
-      method: httpMethod,
-      body: JSON.stringify(requestParams.httpBodyParams),
-      headers: {
-        'Content-Type': 'application/json',
-        'Ore-Access-Token': oreAccessToken
-      }
-    }
-    if (requestParams.httpUrlParams) {
-      Object.keys(requestParams.httpUrlParams).forEach(key => {
-        url.searchParams.append(key, requestParams.httpUrlParams[key])
+    if (requestParams["http-url-params"] && requestParams["http-body-params"]) {
+      Object.keys(requestParams["http-url-params"]).forEach(key => {
+        url.searchParams.append(key, requestParams["http-url-params"][key])
       })
+      options = {
+        method: httpMethod,
+        body: JSON.stringify(requestParams["http-body-params"]),
+        headers: {
+          'Content-Type': 'application/json',
+          'Ore-Access-Token': oreAccessToken
+        }
+      }
+    } else {
+      if (httpMethod.toLowerCase() === "post") {
+        options = {
+          method: httpMethod,
+          body: JSON.stringify(requestParams),
+          headers: {
+            'Content-Type': 'application/json',
+            'Ore-Access-Token': oreAccessToken
+          }
+        }
+      } else {
+        options = {
+          method: httpMethod,
+          headers: {
+            'Content-Type': 'application/json',
+            'Ore-Access-Token': oreAccessToken
+          }
+        }
+        Object.keys(requestParams).forEach(key => url.searchParams.append(key, requestParams[key]))
+      }
     }
     return {
       url,
@@ -215,6 +228,7 @@ class ApiMarketClient {
       oreAccessToken,
       method
     } = await result.json()
+
     return {
       endpoint,
       oreAccessToken,
