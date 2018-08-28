@@ -2,9 +2,9 @@
   "name": "example",
   "version": "1.0.0",
   "description": "Example api using @apimarket/apimarket-server library",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "npm index.js"
+    "test": "npm server.js"
   },
   "author": "",
   "license": "ISC",

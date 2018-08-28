@@ -7,20 +7,29 @@ It wraps the [Open Rights Exchange protocol](https://github.com/api-market/ore-p
 # Usage
 
 ## Server
-
-With the verifier public key in the env file, supply an Express-style HTTP handler that services your API.
+There are 2 ways to use this library. Both of the methods require verifier public key in the following format in the env file
 
 ```
 VERIFIER_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\nMFkw....==\n-----END PUBLIC KEY-----"
 ```
 
-Only valid requests will be served
+### As an express middleware
+With the verifier public key in the env file, supply an Express-style HTTP handler that services your API. Only valid requests will be served
 
 ```javascript
 const { apiMarketRequestValidator } = require('@apimarket/apimarket-server')
 
 app.use(apiMarketRequestValidator())
 
+```
+
+### As a javascript function from the library
+With the verifier public key in the env file, use the checkOreAccessToken function of the library
+
+```javascript
+const { apiMarketRequestValidator } = require('@apimarket/apimarket-server')
+
+const isValidOreAcessToken = await checkOreAccessToken(req.headers['ore-access-token'], req)
 ```
 
 # Publish NPM Package
