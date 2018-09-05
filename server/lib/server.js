@@ -11,20 +11,19 @@ const {
 function getParams(requestParams) {
   let params = {}
   let newKey
-  if (requestParams.httpUrlParams) {
-    Object.keys(requestParams.httpUrlParams).forEach(key => {
+  if (requestParams["http-url-params"] && requestParams["http-body-params"]) {
+    Object.keys(requestParams["http-url-params"]).forEach(key => {
       newKey = "urlParam_" + key
-      params[newKey] = requestParams.httpUrlParams[key]
+      params[newKey] = requestParams["http-url-params"][key]
     })
-  }
-
-  if (requestParams.httpBodyParams) {
-    Object.keys(requestParams.httpBodyParams).forEach(key => {
+    Object.keys(requestParams["http-body-params"]).forEach(key => {
       newKey = "bodyParam_" + key
-      params[newKey] = requestParams.httpBodyParams[key]
+      params[newKey] = requestParams["http-body-params"][key]
     })
+    return params
+  } else {
+    return requestParams
   }
-  return params
 }
 
 // Check if the hash of the request parameters matches the hash included in the ore access token issued by the verifier
@@ -33,7 +32,6 @@ async function checkRequestParams(reqParamHash, requestParams) {
     const params = getParams(requestParams)
     const sortedReqParams = sortJson(params)
     const hash = ecc.sha256(JSON.stringify(sortedReqParams))
-
     if (hash === reqParamHash) {
       return true
     } else {
@@ -61,16 +59,16 @@ async function checkOreAccessToken(oreAccessToken, req) {
       algorithms: ["ES256"]
     })
 
-    if (req.query != undefined) {
-      requestParams.httpUrlParams = req.query
-    }
-
-    if (req.body != undefined) {
-      requestParams.httpBodyParams = req.body
+    if (!Object.keys(req.query).length == 0 && !Object.keys(req.body).length == 0) {
+      requestParams["http-url-params"] = req.query
+      requestParams["http-body-params"] = req.body
+    } else if (!Object.keys(req.query).length == 0) {
+      requestParams = req.query
+    } else {
+      requestParams = req.body
     }
 
     const isValid = await checkRequestParams(payload.reqParamHash, requestParams)
-
     return isValid
   } catch (error) {
     errHead = `invalid ore-access-token `
