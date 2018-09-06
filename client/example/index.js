@@ -1,5 +1,7 @@
 //const {ApiMarketClient} = require('../index')  // uncomment for debugging
-const {ApiMarketClient} = require('@apimarket/apimarket')
+const {
+  ApiMarketClient
+} = require('../src/client.js')
 const configFile = require("../example/apimarket_config.json");
 
 const run = async () => {
@@ -12,12 +14,23 @@ const run = async () => {
     const apiName = "cloud.hadron.contest-2018-07"
 
     //call api - passing in the data it needs
-    const params = {"imageurl":"jc9r05010_drz_small.jpg"}
+    const params = {
+      "imageurl": "https://console.cloud.google.com/storage/browser/apimarket-contest-2018-07-1-coffee/10465_full_jpg.jpg"
+    }
+
+    // use both the http-body-params and http-url-params to pass the parameters if both query and body parameters exist. Otherwise just pass the parameters to the apimarketClient.fetch directly.
+    // for example - 
+    // "httpBodyParams": {
+    //   "imageurl": "https://console.cloud.google.com/storage/browser/apimarket-contest-2018-07-1-coffee/10465_full_jpg.jpg"
+    // },
+    // "httpUrlParams": {
+    //   "env": "staging"
+    // }
+
     const response = await apimarketClient.fetch(apiName, params)
     console.log(JSON.stringify(response, null, 2))
 
-  } 
-  catch(error) {
+  } catch (error) {
     console.error(error)
   }
 }

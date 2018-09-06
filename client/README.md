@@ -34,9 +34,19 @@ const config = require("apimarket_config.json");
 let apimarketClient = new ApiMarketClient(config);
 await apimarketClient.connect()
 
-//call api - passing in the parameters it needs
-//you specify the api to call using it's unique name registered on the ORE blockchain
-const params = {"imageurl":"jc9r05010_drz_small.jpg"}
+// call api - passing in the parameters it needs
+// you specify the api to call using it's unique name registered on the ORE blockchain
+// pass the query parameters as http-url-params and the body parameters as http-body-params if both query and body parameters // exist. Otherwise just pass the parameters to the apimarketClient.fetch directly.
+// example: const params =  {"httpBodyParams": {
+//   "imageurl": "https://console.cloud.google.com/storage/browser/apimarket-contest-2018-07-1-coffee/10465_full_jpg.jpg"
+//   },
+//   "httpUrlParams": {
+//     "env": "staging"
+//   }
+// }
+
+// if only query or body parameters exist, pass them directly to apimarketClient.fetch
+const params = {"imageurl":"https://console.cloud.google.com/storage/browser/apimarket-contest-2018-07-1-coffee/10465_full_jpg.jpg"}
 const response = await apimarketClient.fetch("cloud.hadron.contest-2018-07", params)
 
 //View results
