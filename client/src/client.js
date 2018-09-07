@@ -104,8 +104,8 @@ class ApiMarketClient {
       }
       this.oreNetworkUri = oreNetworkUri
     } catch (error) {
-      const errMsg = `Problem retrieving ORE address from verifier discovery endpoint. Config file expects a verifier running here: ${this.config.verifier}. ${error}`
-      reject(errMsg)
+      const errorMessage = `Problem retrieving ORE address from verifier discovery endpoint. Config file expects a verifier running here: ${this.config.verifier}. ${error}`
+      reject(errorMessage)
     }
 
     //get chainId from ORE blockchain
@@ -206,6 +206,7 @@ class ApiMarketClient {
 
   async getUrlAndAccessToken(apiVoucher, apiRight, requestParams) {
     // Call Verifier to get access token
+    let errMsg
     const params = this.getParams(requestParams)
     const signature = await this.orejs.signVoucher(apiVoucher.id)
     const options = {
@@ -222,12 +223,21 @@ class ApiMarketClient {
     }
 
     const result = await fetch(`${this.config.verifier}/verify`, options)
-
     const {
       endpoint,
       oreAccessToken,
       method
     } = await result.json()
+
+    if (!oreAccessToken || oreAccessToken === undefined) {
+      errorMessage = "Internal Server Error: Verifier is unable to return an ORE access token. Make sure a valid voucher is passed to the verifier."
+      throw new Error(`${errorMessage}`)
+    }
+
+    if (!endpoint || endpoint === undefined) {
+      errorMessage = "Internal Server Error: Verifier is unable to find the Api endpoint. Make sure to pass in the correct right name you want to access."
+      throw new Error(`${errorMessage}`)
+    }
 
     return {
       endpoint,
@@ -239,18 +249,20 @@ class ApiMarketClient {
   async callApiEndpoint(endpoint, httpMethod, requestParams, oreAccessToken) {
     // Makes request to url with accessToken marked ore-authorization in header and returns results
     try {
-      if (!oreAccessToken || oreAccessToken === undefined) {
-        throw new Error()
-      }
       const {
         url,
         options
       } = await this.getOptions(endpoint, httpMethod, oreAccessToken, requestParams)
 
       const response = await fetch(url, options)
-      return response
+
+      if (response.headers.get('content-type').includes("application/json")) {
+        return response.json()
+      } else {
+        return response.text()
+      }
     } catch (error) {
-      throw new Error(`get a valid ore-access-token from the verifier`)
+      return new Error(`Api Endpoint Error: ${error.message}`)
     }
   }
 
@@ -278,8 +290,7 @@ class ApiMarketClient {
 
     // Call the api
     const response = await this.callApiEndpoint(endpoint, method, requestParams, oreAccessToken)
-    log("Response:", response)
-    return response.json()
+    return response
   }
 }
 
