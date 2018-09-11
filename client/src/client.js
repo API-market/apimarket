@@ -4,9 +4,6 @@ const {
   Orejs,
   crypto
 } = require('orejs')
-const {
-  URL
-} = require('url')
 const ecc = require('eosjs-ecc')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const walletPlaceholderText = "######_FILL_ME_IN_WITH_YOUR_WALLET_PASSWORD_######"
@@ -262,7 +259,7 @@ class ApiMarketClient {
         return response.text()
       }
     } catch (error) {
-      return new Error(`Api Endpoint Error: ${error.message}`)
+      throw new Error(`Api Endpoint Error: ${error.message}`)
     }
   }
 
