@@ -92,7 +92,7 @@ async function checkOreAccessToken(oreAccessToken, req) {
 
 // export as a middleware
 function apiMarketRequestValidator() {
-  let errMsg;
+  let errMsg = '';
   return async (req, res, next) => {
     try {
       // check if the verifier public key exists
