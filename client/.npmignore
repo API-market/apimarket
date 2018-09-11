@@ -4,3 +4,4 @@ example/apimarket_config.json
 example/node_modules
 example/package-lock.json
 example/dist
+package-lock.json
