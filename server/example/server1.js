@@ -19,7 +19,6 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 app.use(cookieParser())
-//app.use(apiMarketRequestValidator())
 
 const handler = async (req, res) => {
 
