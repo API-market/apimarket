@@ -28,6 +28,7 @@ function getParams(requestParams) {
 
 // Check if the hash of the request parameters matches the hash included in the ore access token issued by the verifier
 async function checkRequestParams(reqParamHash, requestParams) {
+  let errMsg = ''
   try {
     const params = getParams(requestParams)
     const sortedReqParams = sortJson(params)
@@ -45,8 +46,9 @@ async function checkRequestParams(reqParamHash, requestParams) {
 
 // verify ore access token is a valid jwt token signed by the client
 async function checkOreAccessToken(oreAccessToken, req) {
+  let errHead = `invalid ore-access-token `
+  let errMsg = ''
   try {
-    let errMsg
     let requestParams = {}
     if (!process.env.VERIFIER_PUBLIC_KEY) {
       errMsg = `verifier public key is missing. Provide a valid verifier public key as environment variable`;
@@ -59,10 +61,10 @@ async function checkOreAccessToken(oreAccessToken, req) {
       algorithms: ["ES256"]
     })
 
-    if (!Object.keys(req.query).length == 0 && !Object.keys(req.body).length == 0) {
+    if (req.query && req.body && Object.keys(req.query).length > 0 && Object.keys(req.body).length > 0) {
       requestParams["http-url-params"] = req.query
       requestParams["http-body-params"] = req.body
-    } else if (!Object.keys(req.query).length == 0) {
+    } else if (Object.keys(req.query).length > 0) {
       requestParams = req.query
     } else {
       requestParams = req.body
@@ -71,7 +73,6 @@ async function checkOreAccessToken(oreAccessToken, req) {
     const isValid = await checkRequestParams(payload.reqParamHash, requestParams)
     return isValid
   } catch (error) {
-    errHead = `invalid ore-access-token `
     if (error.message == 'jwt expired') {
       errMsg = ` Expired ore-access-token. Provide a valid token.`
     }
@@ -84,8 +85,8 @@ async function checkOreAccessToken(oreAccessToken, req) {
       errMsg = ` Malformed ore-access-token. Make sure the ore-access-token has the valid right name and voucher.`
     }
 
-    logError("Error", `${errHead}:${errMsg}`)
-    throw new Error(`${errHead}:${errMsg}`)
+    logError("Error", `${errHead}:${errMsg}:${error.message}`)
+    throw new Error(`${errHead}:${errMsg}:${error.message}`)
   }
 }
 
