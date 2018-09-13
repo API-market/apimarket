@@ -40,8 +40,8 @@
     "typescript": "^2.8.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.42",
     "@babel/core": "^7.0.0-beta.42",
-    "@babel/preset-env": "^7.0.0-beta.42"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
   }
 }
