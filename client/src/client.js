@@ -193,7 +193,7 @@ class ApiMarketClient {
       const rightA = this.orejs.getRight(a, apiName)
       const rightB = this.orejs.getRight(b, apiName)
       return rightA.price_in_cpu - rightB.price_in_cpu || a.instrument.start_time - b.instrument.end_time
-    })[0]
+    })[apiVouchers.length - 1]
     const apiRight = this.orejs.getRight(apiVoucher, apiName)
     return {
       apiVoucher,
@@ -203,7 +203,8 @@ class ApiMarketClient {
 
   async getUrlAndAccessToken(apiVoucher, apiRight, requestParams) {
     // Call Verifier to get access token
-    let errMsg
+    let errorMessage
+    let result
     const params = this.getParams(requestParams)
     const signature = await this.orejs.signVoucher(apiVoucher.id)
     const options = {
@@ -218,8 +219,17 @@ class ApiMarketClient {
         'Content-Type': 'application/json'
       }
     }
+    try {
+      result = await fetch(`${this.config.verifier}/verify`, options)
+      if (!result.ok) {
+        let error = await result.json()
+        throw new Error(error.message)
+      }
+    } catch (error) {
+      errorMessage = "Internal Server Error"
+      throw new Error(`${errorMessage}:${error.message}`)
+    }
 
-    const result = await fetch(`${this.config.verifier}/verify`, options)
     const {
       endpoint,
       oreAccessToken,
