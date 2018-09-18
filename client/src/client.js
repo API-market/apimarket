@@ -1,10 +1,10 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
+const hash = require('hash.js')
 const {
   Orejs,
   crypto
 } = require('orejs')
-const ecc = require('eosjs-ecc')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const walletPlaceholderText = "######_FILL_ME_IN_WITH_YOUR_WALLET_PASSWORD_######"
 
@@ -141,6 +141,15 @@ class ApiMarketClient {
     }
   }
 
+
+  encryptParams(params) {
+    let encryptedParams = {}
+    Object.keys(params).map(key => {
+      encryptedParams[key] = hash.sha256().update(params[key]).digest('hex')
+    })
+    return encryptedParams
+  }
+
   async getOptions(endpoint, httpMethod, oreAccessToken, requestParameters) {
     let options
     let url
@@ -206,11 +215,12 @@ class ApiMarketClient {
     let errorMessage
     let result
     const params = this.getParams(requestParams)
+    const encryptedParams = this.encryptParams(params)
     const signature = await this.orejs.signVoucher(apiVoucher.id)
     const options = {
       method: 'POST',
       body: JSON.stringify({
-        requestParams: params,
+        requestParams: encryptedParams,
         rightName: apiRight.right_name,
         signature: signature,
         voucherId: apiVoucher.id
