@@ -310,9 +310,11 @@ class ApiMarketClient {
     log("OreAccessToken", oreAccessToken)
 
     // add the additional parameters returned from the verifier which are not already there in the client request to the Api provider
-    Object.keys(additionalParameters).map(key => {
-      requestParams[key] = additionalParameters[key]
-    })
+    if (additionalParameters.length != 0) {
+      Object.keys(additionalParameters).map(key => {
+        requestParams[key] = additionalParameters[key]
+      })
+    }
 
     // Call the api
     const response = await this.callApiEndpoint(endpoint, method, requestParams, oreAccessToken)
