@@ -8,7 +8,7 @@ const {
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const walletPlaceholderText = "######_FILL_ME_IN_WITH_YOUR_WALLET_PASSWORD_######"
 
-const TRACING = false //enable when debugging to see detailed outputs
+const TRACING = true //enable when debugging to see detailed outputs
 
 class ApiMarketClient {
   constructor(config) {
@@ -305,11 +305,19 @@ class ApiMarketClient {
       method,
       requestParameters
     } = await this.getUrlAndAccessToken(apiVoucher, apiRight, requestParams)
+
     log("Url:", endpoint)
     log("OreAccessToken", oreAccessToken)
 
+    // add the request parameters returned from the verifier which are not already there in the client request to the Api provider
+    Object.keys(requestParameters).map(key => {
+      if (!Object.keys(requestParams).includes(key)) {
+        requestParams[key] = requestParameters[key]
+      }
+    })
+
     // Call the api
-    const response = await this.callApiEndpoint(endpoint, method, requestParameters, oreAccessToken)
+    const response = await this.callApiEndpoint(endpoint, method, requestParams, oreAccessToken)
     return response
   }
 }
