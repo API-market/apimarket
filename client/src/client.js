@@ -8,7 +8,7 @@ const {
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const walletPlaceholderText = "######_FILL_ME_IN_WITH_YOUR_WALLET_PASSWORD_######"
 
-const TRACING = true //enable when debugging to see detailed outputs
+const TRACING = false //enable when debugging to see detailed outputs
 
 class ApiMarketClient {
   constructor(config) {
