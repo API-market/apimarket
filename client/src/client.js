@@ -244,7 +244,7 @@ class ApiMarketClient {
       endpoint,
       oreAccessToken,
       method,
-      requestParameters
+      additionalParameters
     } = await result.json()
 
     if (!oreAccessToken || oreAccessToken === undefined) {
@@ -261,7 +261,7 @@ class ApiMarketClient {
       endpoint,
       oreAccessToken,
       method,
-      requestParameters
+      additionalParameters
     }
   }
 
@@ -303,17 +303,15 @@ class ApiMarketClient {
       endpoint,
       oreAccessToken,
       method,
-      requestParameters
+      additionalParameters
     } = await this.getUrlAndAccessToken(apiVoucher, apiRight, requestParams)
 
     log("Url:", endpoint)
     log("OreAccessToken", oreAccessToken)
 
-    // add the request parameters returned from the verifier which are not already there in the client request to the Api provider
-    Object.keys(requestParameters).map(key => {
-      if (!Object.keys(requestParams).includes(key)) {
-        requestParams[key] = requestParameters[key]
-      }
+    // add the additional parameters returned from the verifier which are not already there in the client request to the Api provider
+    Object.keys(additionalParameters).map(key => {
+      requestParams[key] = additionalParameters[key]
     })
 
     // Call the api
