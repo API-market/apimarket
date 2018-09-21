@@ -1,10 +1,10 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
+const hash = require('hash.js')
 const {
   Orejs,
   crypto
 } = require('orejs')
-const ecc = require('eosjs-ecc')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const walletPlaceholderText = "######_FILL_ME_IN_WITH_YOUR_WALLET_PASSWORD_######"
 
@@ -141,18 +141,27 @@ class ApiMarketClient {
     }
   }
 
-  async getOptions(endpoint, httpMethod, oreAccessToken, requestParams) {
+
+  encryptParams(params) {
+    let encryptedParams = {}
+    Object.keys(params).map(key => {
+      encryptedParams[key] = hash.sha256().update(params[key]).digest('hex')
+    })
+    return encryptedParams
+  }
+
+  async getOptions(endpoint, httpMethod, oreAccessToken, requestParameters) {
     let options
     let url
     url = new URL(endpoint)
 
-    if (requestParams["http-url-params"] && requestParams["http-body-params"]) {
-      Object.keys(requestParams["http-url-params"]).forEach(key => {
-        url.searchParams.append(key, requestParams["http-url-params"][key])
+    if (requestParameters["http-url-params"] && requestParameters["http-body-params"]) {
+      Object.keys(requestParameters["http-url-params"]).forEach(key => {
+        url.searchParams.append(key, requestParameters["http-url-params"][key])
       })
       options = {
         method: httpMethod,
-        body: JSON.stringify(requestParams["http-body-params"]),
+        body: JSON.stringify(requestParameters["http-body-params"]),
         headers: {
           'Content-Type': 'application/json',
           'Ore-Access-Token': oreAccessToken
@@ -162,7 +171,7 @@ class ApiMarketClient {
       if (httpMethod.toLowerCase() === "post") {
         options = {
           method: httpMethod,
-          body: JSON.stringify(requestParams),
+          body: JSON.stringify(requestParameters),
           headers: {
             'Content-Type': 'application/json',
             'Ore-Access-Token': oreAccessToken
@@ -176,7 +185,7 @@ class ApiMarketClient {
             'Ore-Access-Token': oreAccessToken
           }
         }
-        Object.keys(requestParams).forEach(key => url.searchParams.append(key, requestParams[key]))
+        Object.keys(requestParameters).forEach(key => url.searchParams.append(key, requestParameters[key]))
       }
     }
     return {
@@ -193,7 +202,7 @@ class ApiMarketClient {
       const rightA = this.orejs.getRight(a, apiName)
       const rightB = this.orejs.getRight(b, apiName)
       return rightA.price_in_cpu - rightB.price_in_cpu || a.instrument.start_time - b.instrument.end_time
-    })[0]
+    })[apiVouchers.length - 1]
     const apiRight = this.orejs.getRight(apiVoucher, apiName)
     return {
       apiVoucher,
@@ -203,13 +212,15 @@ class ApiMarketClient {
 
   async getUrlAndAccessToken(apiVoucher, apiRight, requestParams) {
     // Call Verifier to get access token
-    let errMsg
+    let errorMessage
+    let result
     const params = this.getParams(requestParams)
+    const encryptedParams = this.encryptParams(params)
     const signature = await this.orejs.signVoucher(apiVoucher.id)
     const options = {
       method: 'POST',
       body: JSON.stringify({
-        requestParams: params,
+        requestParams: encryptedParams,
         rightName: apiRight.right_name,
         signature: signature,
         voucherId: apiVoucher.id
@@ -218,12 +229,22 @@ class ApiMarketClient {
         'Content-Type': 'application/json'
       }
     }
+    try {
+      result = await fetch(`${this.config.verifier}/verify`, options)
+      if (!result.ok) {
+        let error = await result.json()
+        throw new Error(error.message)
+      }
+    } catch (error) {
+      errorMessage = "Internal Server Error"
+      throw new Error(`${errorMessage}:${error.message}`)
+    }
 
-    const result = await fetch(`${this.config.verifier}/verify`, options)
     const {
       endpoint,
       oreAccessToken,
-      method
+      method,
+      additionalParameters
     } = await result.json()
 
     if (!oreAccessToken || oreAccessToken === undefined) {
@@ -239,17 +260,18 @@ class ApiMarketClient {
     return {
       endpoint,
       oreAccessToken,
-      method
+      method,
+      additionalParameters
     }
   }
 
-  async callApiEndpoint(endpoint, httpMethod, requestParams, oreAccessToken) {
+  async callApiEndpoint(endpoint, httpMethod, requestParameters, oreAccessToken) {
     // Makes request to url with accessToken marked ore-authorization in header and returns results
     try {
       const {
         url,
         options
-      } = await this.getOptions(endpoint, httpMethod, oreAccessToken, requestParams)
+      } = await this.getOptions(endpoint, httpMethod, oreAccessToken, requestParameters)
 
       const response = await fetch(url, options)
 
@@ -280,10 +302,19 @@ class ApiMarketClient {
     const {
       endpoint,
       oreAccessToken,
-      method
+      method,
+      additionalParameters
     } = await this.getUrlAndAccessToken(apiVoucher, apiRight, requestParams)
+
     log("Url:", endpoint)
     log("OreAccessToken", oreAccessToken)
+
+    // add the additional parameters returned from the verifier which are not already there in the client request to the Api provider
+    if (additionalParameters.length != 0) {
+      Object.keys(additionalParameters).map(key => {
+        requestParams[key] = additionalParameters[key]
+      })
+    }
 
     // Call the api
     const response = await this.callApiEndpoint(endpoint, method, requestParams, oreAccessToken)
