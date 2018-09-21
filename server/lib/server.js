@@ -2,6 +2,7 @@ require('dotenv').config()
 const analyticsEvent = require(__dirname + "/segment")
 const ecc = require('eosjs-ecc')
 const jwt = require('jsonwebtoken')
+const hash = require('hash.js')
 const sortJson = require('sort-json')
 const {
   logError
@@ -26,13 +27,23 @@ function getParams(requestParams) {
   }
 }
 
+// encrypt request parameters
+function encryptParams(params) {
+  let encryptedParams = {}
+  Object.keys(params).map(key => {
+    encryptedParams[key] = hash.sha256().update(params[key]).digest('hex')
+  })
+  return encryptedParams
+}
+
 // Check if the hash of the request parameters matches the hash included in the ore access token issued by the verifier
 async function checkRequestParams(reqParamHash, requestParams) {
   let errMsg = ''
   try {
     const params = getParams(requestParams)
     const sortedReqParams = sortJson(params)
-    const hash = ecc.sha256(JSON.stringify(sortedReqParams))
+    const hashedReqParams = encryptParams(sortedReqParams)
+    const hash = ecc.sha256(JSON.stringify(hashedReqParams))
     if (hash === reqParamHash) {
       return true
     } else {
@@ -60,7 +71,6 @@ async function checkOreAccessToken(oreAccessToken, req) {
     const payload = await jwt.verify(oreAccessToken, verifierPublicKey, {
       algorithms: ["ES256"]
     })
-
     if (req.query && req.body && Object.keys(req.query).length > 0 && Object.keys(req.body).length > 0) {
       requestParams["http-url-params"] = req.query
       requestParams["http-body-params"] = req.body
@@ -108,7 +118,6 @@ function apiMarketRequestValidator() {
 
       // Check if access token is valid
       let ifValid = await checkOreAccessToken(req.headers['ore-access-token'], req)
-
       if (ifValid) {
         // record data in segment 
         const ip = req.connection.remoteAddress || req.headers['x-forwarded-for']

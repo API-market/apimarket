@@ -1,10 +1,10 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
+const hash = require('hash.js')
 const {
   Orejs,
   crypto
 } = require('orejs')
-const ecc = require('eosjs-ecc')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const walletPlaceholderText = "######_FILL_ME_IN_WITH_YOUR_WALLET_PASSWORD_######"
 
@@ -141,6 +141,15 @@ class ApiMarketClient {
     }
   }
 
+
+  encryptParams(params) {
+    let encryptedParams = {}
+    Object.keys(params).map(key => {
+      encryptedParams[key] = hash.sha256().update(params[key]).digest('hex')
+    })
+    return encryptedParams
+  }
+
   async getOptions(endpoint, httpMethod, oreAccessToken, requestParameters) {
     let options
     let url
@@ -206,11 +215,12 @@ class ApiMarketClient {
     let errorMessage
     let result
     const params = this.getParams(requestParams)
+    const encryptedParams = this.encryptParams(params)
     const signature = await this.orejs.signVoucher(apiVoucher.id)
     const options = {
       method: 'POST',
       body: JSON.stringify({
-        requestParams: params,
+        requestParams: encryptedParams,
         rightName: apiRight.right_name,
         signature: signature,
         voucherId: apiVoucher.id
@@ -234,7 +244,7 @@ class ApiMarketClient {
       endpoint,
       oreAccessToken,
       method,
-      requestParameters
+      additionalParameters
     } = await result.json()
 
     if (!oreAccessToken || oreAccessToken === undefined) {
@@ -251,7 +261,7 @@ class ApiMarketClient {
       endpoint,
       oreAccessToken,
       method,
-      requestParameters
+      additionalParameters
     }
   }
 
@@ -293,13 +303,21 @@ class ApiMarketClient {
       endpoint,
       oreAccessToken,
       method,
-      requestParameters
+      additionalParameters
     } = await this.getUrlAndAccessToken(apiVoucher, apiRight, requestParams)
+
     log("Url:", endpoint)
     log("OreAccessToken", oreAccessToken)
 
+    // add the additional parameters returned from the verifier which are not already there in the client request to the Api provider
+    if (additionalParameters.length != 0) {
+      Object.keys(additionalParameters).map(key => {
+        requestParams[key] = additionalParameters[key]
+      })
+    }
+
     // Call the api
-    const response = await this.callApiEndpoint(endpoint, method, requestParameters, oreAccessToken)
+    const response = await this.callApiEndpoint(endpoint, method, requestParams, oreAccessToken)
     return response
   }
 }
