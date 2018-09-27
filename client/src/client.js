@@ -7,7 +7,7 @@ const {
 } = require('orejs')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const walletPlaceholderText = "######_FILL_ME_IN_WITH_YOUR_WALLET_PASSWORD_######"
-
+const uuidv1 = require('uuid/v1');
 const TRACING = false //enable when debugging to see detailed outputs
 
 class ApiMarketClient {
@@ -272,7 +272,6 @@ class ApiMarketClient {
         url,
         options
       } = await this.getOptions(endpoint, httpMethod, oreAccessToken, requestParameters)
-
       const response = await fetch(url, options)
 
       if (response.headers.get('content-type').includes("application/json")) {
@@ -294,8 +293,15 @@ class ApiMarketClient {
     log("Voucher purchased :", apiVoucher)
     log("Right to be used :", apiRight)
 
-    // Call cpuContract.approve(accountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
-    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu)
+    // get approved amount
+    const approvedAmntForVerifier = await this.orejs.getApprovedCpuBalance(this.config.accountName, this.config.verifierAccountName)
+
+    if (approvedAmntForVerifier < apiRight.price_in_cpu) {
+      const memo = "approve CPU for the verifier " + uuidv1();
+      // Call cpuContract.approve(accountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
+      await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu, memo);
+    }
+
     log("CPU approved for the verifier!")
 
     // Call the verifier to get the access token
