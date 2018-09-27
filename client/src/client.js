@@ -44,10 +44,6 @@ class ApiMarketClient {
       throw new Error(`${errMsg} ${error}`)
     }
 
-    // if (!this.checkVerifierAuthKey(config.verifierAccountName, config.verifierAuthKey)) {
-    //   errorMessage += `\n --> VerifierAuthKey is invalid. Download the API's config file from api.market.`
-    // }
-
     if (config.verifierAuthKey.length == 0) {
       errorMessage += `\n --> VerifierAuthKey is missing or invalid. Download the API's config file from api.market.`
     }
