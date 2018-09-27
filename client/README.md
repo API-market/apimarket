@@ -8,19 +8,17 @@ It wraps the [Open Rights Exchange protocol](https://github.com/api-market/ore-p
 
 ## Client
 
-The `apimarket_config.json` is the keyfile which stores your encrypted wallet information and the address to connect to the ORE blockchain. You can download this file from the api.market website. After you download it, you'll need to add the password you used to create the wallet on api.market. 
+The `apimarket_config.json` is the keyfile which stores the address to connect to the ORE blockchain. It also stores the verifierAuthKey which is used to authrorize verifier to transfer the CPU amount from user's account to API provider's account for the API call. You can download this file from the api.market website.
 
-IMPORTANT: We don't have your wallet's unencrytped private key and we never store your wallet password.
+IMPORTANT: The verifierAuthKey cannot be used for any other functions such as CPU transfer. It is only good for authrorize verifier. 
 
 An example configuration file looks like:
 ```json
 {
-    "walletPassword": "PW5Kb...",
-    "accountName": "sjvch...",
-    "accountPrivateKeyEncrypted": "U2Fsd...",
-    "publicKey": "EOS74...",
-    "verifier": "https://verifier....com",
-    "verifierAccountName": "verifier.ore"
+  "accountName": "ajscf...",
+  "verifierAuthKey": "U2Fsd...",
+  "verifier": "https...",
+  "verifierAccountName": "verif..."
 }
 ```
 

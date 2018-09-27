@@ -1,14 +1,15 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
+const base32 = require('base32')
+const ecc = require('eosjs-ecc')
 const hash = require('hash.js')
 const {
   Orejs,
   crypto
 } = require('orejs')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
-const walletPlaceholderText = "######_FILL_ME_IN_WITH_YOUR_WALLET_PASSWORD_######"
 const uuidv1 = require('uuid/v1');
-const TRACING = true //enable when debugging to see detailed outputs
+const TRACING = false //enable when debugging to see detailed outputs
 
 class ApiMarketClient {
   constructor(config) {
@@ -25,39 +26,37 @@ class ApiMarketClient {
     }
 
     var {
-      walletPassword,
       accountName,
-      accountPrivateKeyEncrypted,
       verifier,
-      verifierAccountName
+      verifierAccountName,
+      verifierAuthKey
     } = config
     var errorMessage = ''
 
-    //Check wallet password and that private key can be decrypted correctly
-    if (!walletPassword || walletPassword == walletPlaceholderText) {
-      errorMessage += `\n --> Missing wallet password. Use the same password you used to create your wallet on api.market.`
-    } else {
-      //decrypt accountPrivateKeyEncrypted using walletPassword and confirm a valid result
-      try {
-        accountPrivateKeyEncrypted = (accountPrivateKeyEncrypted) ? accountPrivateKeyEncrypted.toString() : ''
-        config.accountPrivateKeyEncrypted = [crypto.decrypt(accountPrivateKeyEncrypted, walletPassword)]
-      } catch (error) {
-        let errMsg = `decryption error: ${error.message}`
-        if (error.message == 'Malformed UTF-8 data') {
-          errMsg = `Problem decrypting your wallet. Make sure that the walletPassword in the apimarket config file is the same as you used to create your wallet on api.market.`
-        }
-        throw new Error(`${errMsg} ${error}`)
+    //decode verifierAuthKey
+    try {
+      config.verifierAuthKey = base32.decode(verifierAuthKey)
+    } catch (error) {
+      let errMsg = `decode error: ${error.message}`
+      if (error.message == 'Non-base58 character') {
+        errMsg = `Problem decoding the verifierAuthKey. Make sure to download the correct config file from api.market.`
       }
+      throw new Error(`${errMsg} ${error}`)
+    }
 
-      if (config.accountPrivateKeyEncrypted.length == 0) {
-        errorMessage += `\n --> AccountPrivateKeyEncrypted is missing or invalid. Download the API's config file from api.market.`
-      }
+    // if (!this.checkVerifierAuthKey(config.verifierAccountName, config.verifierAuthKey)) {
+    //   errorMessage += `\n --> VerifierAuthKey is invalid. Download the API's config file from api.market.`
+    // }
+
+    if (config.verifierAuthKey.length == 0) {
+      errorMessage += `\n --> VerifierAuthKey is missing or invalid. Download the API's config file from api.market.`
     }
 
     //confirm other config values are present
     if (!accountName) {
       errorMessage += `\n --> Missing accountName. Download the API's config file from api.market.`
     }
+
     if (!verifier || !verifierAccountName) {
       errorMessage += `\n --> Missing verifier or verifierAccountName. Download the API's config file from api.market - it will include these values.`
     }
@@ -78,7 +77,7 @@ class ApiMarketClient {
         this.orejs = new Orejs({
           httpEndpoint: this.oreNetworkUri,
           chainId: this.OreChainId,
-          keyProvider: this.config.accountPrivateKeyEncrypted,
+          keyProvider: [this.config.verifierAuthKey.toString()],
           oreAuthAccountName: this.config.accountName,
           sign: true
         })
