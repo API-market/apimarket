@@ -77,7 +77,7 @@ class ApiMarketClient {
           oreAuthAccountName: this.config.accountName,
           sign: true
         })
-        await this.checkVerifierAuthKey(this.config.verifierAccountName, this.config.verifierAuthKey, reject)
+        await this.checkVerifierAuthKey(this.config.accountName, this.config.verifierAuthKey, reject)
         resolve(this)
 
       })();
