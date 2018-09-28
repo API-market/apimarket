@@ -1,8 +1,6 @@
 {
-    "walletPassword": "PW5KE...",
-    "accountName": "ajscf...",
-    "accountPrivateKeyEncrypted": "U2Fsd...",
-    "accountPublicKey": "EOS8j...",
-    "verifier": "https...",
-    "verifierAccountName": "verif..."
-  }
+  "accountName": "ajscf...",
+  "verifierAuthKey": "U2Fsd...",
+  "verifier": "https...",
+  "verifierAccountName": "verif..."
+}
