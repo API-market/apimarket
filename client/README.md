@@ -10,7 +10,7 @@ It wraps the [Open Rights Exchange protocol](https://github.com/api-market/ore-p
 
 The `apimarket_config.json` is the keyfile which stores the address to connect to the ORE blockchain. It also stores the verifierAuthKey which is used to authrorize verifier to transfer the CPU amount from user's account to API provider's account for the API call. You can download this file from the api.market website.
 
-IMPORTANT: The verifierAuthKey cannot be used for any other functions such as CPU transfer. It is only good for authrorize verifier. 
+IMPORTANT: The verifierAuthKey cannot be used for any other functions such as CPU transfer. It can only be used to authrorize verifier. 
 
 An example configuration file looks like:
 ```json
