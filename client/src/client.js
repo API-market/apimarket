@@ -77,9 +77,24 @@ class ApiMarketClient {
           oreAuthAccountName: this.config.accountName,
           sign: true
         })
+        await this.checkVerifierAuthKey(this.config.verifierAccountName, this.config.verifierAuthKey, reject)
         resolve(this)
+
       })();
     });
+  }
+
+  async checkVerifierAuthKey(accountName, verifierAuthKey, reject) {
+    try {
+      // check if the verifierAuthKey belongs to the account name in the config file 
+      const verifierAuthPubKey = await ecc.privateToPublic(verifierAuthKey.toString())
+      const isValidKey = await this.orejs.checkPubKeytoAccount(accountName, verifierAuthPubKey)
+      if (!isValidKey) {
+        throw new Error(`VerifierAuthKey does not belong to the accountName. Make sure to download the correct config file from api.market.`)
+      }
+    } catch (error) {
+      reject(error)
+    }
   }
 
   //use verifier discovery endpoint to retrieve ORE node address and chainId
