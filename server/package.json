@@ -1,6 +1,6 @@
 {
   "name": "@apimarket/apimarket-server",
-  "version": "0.7.12",
+  "version": "1.0.0",
   "description": "Server library for api.market",
   "main": "./dist/index.js",
   "scripts": {
