@@ -54,7 +54,17 @@ console.log(response)
 
 # Publish NPM Package
 
-To publish an updated package, first log-in to npmjs with `npm login` (using account apimarket)
+PREREQISITE:
+
+Option 1) Use an .npmrc token
+- Include an .npmrc file in the user's root or project root e.g. ~/.npmrc or .../{projectroot}/.npmrc
+- To create an .npmrc file, copy the .npmrc.example file and insert the token (retrieved from LastPass)
+
+OR 
+
+Option 2) log-in to npmjs with `npm login` (using account apimarket)
+
+To publish an updated package...
 
 - Update version number in package.json (and example's package.json)
 - `npm publish --tag staging` - to publish staging version
