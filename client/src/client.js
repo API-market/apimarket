@@ -1,6 +1,6 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
-const base32 = require('base32')
+const Base64 = require('js-base64').Base64;
 const ecc = require('eosjs-ecc')
 const hash = require('hash.js')
 const {
@@ -10,7 +10,7 @@ const {
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const uuidv1 = require('uuid/v1');
 
-const TRACING = false //enable when debugging to see detailed outputs
+const TRACING = true //enable when debugging to see detailed outputs
 
 class ApiMarketClient {
   constructor(config) {
@@ -36,7 +36,7 @@ class ApiMarketClient {
 
     //decode verifierAuthKey
     try {
-      config.verifierAuthKey = base32.decode(verifierAuthKey)
+      config.verifierAuthKey = Base64.decode(verifierAuthKey)
     } catch (error) {
       let errMsg = `decode error: ${error.message}`
       if (error.message == 'Non-base58 character') {
