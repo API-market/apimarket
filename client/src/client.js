@@ -1,16 +1,16 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
-const base32 = require('base32')
+const Base64 = require('js-base64').Base64;
 const ecc = require('eosjs-ecc')
 const hash = require('hash.js')
 const {
   Orejs,
   crypto
-} = require('orejs')
+} = require('@open-rights-exchange/orejs')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const uuidv1 = require('uuid/v1');
 
-const TRACING = false //enable when debugging to see detailed outputs
+const TRACING = true //enable when debugging to see detailed outputs
 
 class ApiMarketClient {
   constructor(config) {
@@ -36,7 +36,7 @@ class ApiMarketClient {
 
     //decode verifierAuthKey
     try {
-      config.verifierAuthKey = base32.decode(verifierAuthKey)
+      config.verifierAuthKey = Base64.decode(verifierAuthKey)
     } catch (error) {
       let errMsg = `decode error: ${error.message}`
       if (error.message == 'Non-base58 character') {
@@ -306,7 +306,9 @@ class ApiMarketClient {
     log("Right to be used :", apiRight)
 
     // Call cpuContract.approve(accountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
-    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu)
+    const memo = "approve CPU transfer for" + this.config.verifierAccountName + uuidv1()
+
+    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu, memo)
     log("CPU approved for the verifier!")
 
     // Call the verifier to get the access token
@@ -321,7 +323,7 @@ class ApiMarketClient {
     log("OreAccessToken", oreAccessToken)
 
     // add the additional parameters returned from the verifier which are not already there in the client request to the Api provider
-    if (additionalParameters.length != 0) {
+    if (additionalParameters && additionalParameters.length != 0) {
       Object.keys(additionalParameters).map(key => {
         requestParams[key] = additionalParameters[key]
       })
