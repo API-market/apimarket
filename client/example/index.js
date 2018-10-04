@@ -1,7 +1,6 @@
-//const {ApiMarketClient} = require('../index')  // uncomment for debugging
 const {
   ApiMarketClient
-} = require('../src/client.js')
+} = require('@apimarket/apimarket')
 const configFile = require("../example/apimarket_config.json");
 
 const run = async () => {
