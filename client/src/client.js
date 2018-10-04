@@ -6,7 +6,7 @@ const hash = require('hash.js')
 const {
   Orejs,
   crypto
-} = require('orejs')
+} = require('@open-rights-exchange/orejs')
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const uuidv1 = require('uuid/v1');
 
@@ -306,7 +306,9 @@ class ApiMarketClient {
     log("Right to be used :", apiRight)
 
     // Call cpuContract.approve(accountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
-    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu)
+    const memo = "approve CPU transfer for" + this.config.verifierAccountName + uuidv1()
+
+    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu, memo)
     log("CPU approved for the verifier!")
 
     // Call the verifier to get the access token
@@ -321,7 +323,7 @@ class ApiMarketClient {
     log("OreAccessToken", oreAccessToken)
 
     // add the additional parameters returned from the verifier which are not already there in the client request to the Api provider
-    if (additionalParameters.length != 0) {
+    if (additionalParameters && additionalParameters.length != 0) {
       Object.keys(additionalParameters).map(key => {
         requestParams[key] = additionalParameters[key]
       })
