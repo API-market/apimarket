@@ -14,7 +14,7 @@ const run = async () => {
 
     //call api - passing in the data it needs
     const params = {
-      "imageurl": "https://storage.googleapis.com/partner-aikon.appspot.com/partner-hadron-transferLearning-v1-deepspace.jpg",
+      "imageurl": "https://storage.googleapis.com/partner-aikon.appspot.com/partner-hadron-transferLearning-v1-deepspace.jpg"
     }
 
     // use both the http-body-params and http-url-params to pass the parameters if both query and body parameters exist. Otherwise just pass the parameters to the apimarketClient.fetch directly.
