@@ -10,7 +10,7 @@ const {
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const uuidv1 = require('uuid/v1');
 
-const TRACING = true //enable when debugging to see detailed outputs
+const TRACING = false //enable when debugging to see detailed outputs
 
 class ApiMarketClient {
   constructor(config) {
@@ -308,7 +308,10 @@ class ApiMarketClient {
     // Call cpuContract.approve(accountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
     const memo = "approve CPU transfer for" + this.config.verifierAccountName + uuidv1()
 
-    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu, memo)
+    // Permission name for the account
+    const authorization = "authverifier";
+
+    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu, memo, authorization)
     log("CPU approved for the verifier!")
 
     // Call the verifier to get the access token
