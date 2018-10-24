@@ -7,6 +7,14 @@ const {
   Orejs,
   crypto
 } = require('@open-rights-exchange/orejs')
+const semver = require('semver');
+const engines = require('../package').engines;
+const version = engines.node;
+
+if (!semver.satisfies(process.version, version)) {
+  throw new Error(`Required node version ${version} not satisfied with current version ${process.version}.`);
+}
+
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const uuidv1 = require('uuid/v1');
 
@@ -107,6 +115,7 @@ class ApiMarketClient {
       const {
         oreNetworkUri
       } = await oreNetworkData.json()
+
       if (!oreNetworkUri) {
         throw new Error()
       }
@@ -208,6 +217,7 @@ class ApiMarketClient {
   async getApiVoucherAndRight(apiName) {
     // Call orejs.findInstruments(accountName, activeOnly:true, args:{category:’apiMarket.apiVoucher’, rightName:’xxxx’}) => [apiVouchers]
     const apiVouchers = await this.orejs.findInstruments(this.config.accountName, true, VOUCHER_CATEGORY, apiName)
+
     // Choose one voucher - rules to select between vouchers: use cheapest priced and then with the one that has the earliest endDate
     const apiVoucher = apiVouchers.sort((a, b) => {
       const rightA = this.orejs.getRight(a, apiName)
