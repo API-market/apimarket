@@ -32,15 +32,16 @@
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "hash.js": "^1.1.5",
     "js-base64": "^2.4.9",
     "jsonwebtoken": "^8.3.0",
     "morgan": "^1.9.0",
     "node-fetch": "^2.1.2",
+    "semver": "^5.6.0",
     "sort-json": "^2.0.0",
     "tslint": "^5.9.1",
     "typescript": "^2.8.1",
-    "uuid": "^3.3.2",
-    "hash.js": "^1.1.5"
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
