@@ -11,10 +11,11 @@ const semver = require('semver');
 const engines = require('../package').engines;
 const version = engines.node;
 
-if (!semver.satisfies(process.version, version)) {
-  throw new Error(`Required node version ${version} not satisfied with current version ${process.version}.`);
+if (process.version.length != 0) {
+  if (!semver.satisfies(process.version, version)) {
+    throw new Error(`Required node version ${version} not satisfied with current version ${process.version}.`);
+  }
 }
-
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const uuidv1 = require('uuid/v1');
 
@@ -40,20 +41,10 @@ class ApiMarketClient {
       verifierAccountName,
       verifierAuthKey
     } = config
+
     var errorMessage = ''
 
-    //decode verifierAuthKey
-    try {
-      config.verifierAuthKey = Base64.decode(verifierAuthKey)
-    } catch (error) {
-      let errMsg = `decode error: ${error.message}`
-      if (error.message == 'Non-base58 character') {
-        errMsg = `Problem decoding the verifierAuthKey. Make sure to download the correct config file from api.market.`
-      }
-      throw new Error(`${errMsg} ${error}`)
-    }
-
-    if (config.verifierAuthKey.length == 0) {
+    if (!verifierAuthKey) {
       errorMessage += `\n --> VerifierAuthKey is missing or invalid. Download the API's config file from api.market.`
     }
 
@@ -68,6 +59,18 @@ class ApiMarketClient {
 
     if (errorMessage != '') {
       throw new Error(`Config file (e.g., apimarket_config.json) is missing or has bad values. ${errorMessage}`)
+    }
+
+    //decode verifierAuthKey
+    try {
+      config.verifierAuthKey = Base64.decode(verifierAuthKey)
+    } catch (error) {
+
+      let errMsg = `decode error: ${error.message}`
+      if (error.message == 'Non-base58 character') {
+        errMsg = `Problem decoding the verifierAuthKey. Make sure to download the correct config file from api.market.`
+      }
+      throw new Error(`${errMsg} ${error}`)
     }
 
     this.config = config
@@ -293,9 +296,7 @@ class ApiMarketClient {
         url,
         options
       } = await this.getOptions(endpoint, httpMethod, oreAccessToken, requestParameters)
-
       const response = await fetch(url, options)
-
       if (response.headers.get('content-type').includes("application/json")) {
         return response.json()
       } else {
