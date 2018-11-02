@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const Base64 = require('js-base64').Base64;
 const ecc = require('eosjs-ecc')
 const hash = require('hash.js')
+const semver = require('semver');
 var URL = require('url').URL
 const {
   Orejs,
@@ -10,6 +11,13 @@ const {
 } = require('@open-rights-exchange/orejs')
 const engines = require('../package').engines;
 const version = engines.node;
+
+// check node version when running the client within a node application
+if (process.version.length != 0) {
+  if (!semver.satisfies(process.version, version)) {
+    throw new Error(`Required node version ${version} not satisfied with current version ${process.version}.`);
+  }
+}
 
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const uuidv1 = require('uuid/v1');
