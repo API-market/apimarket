@@ -50,4 +50,4 @@ To publish an updated package...
 - `npm publish --tag staging` - to publish staging version
 - `npm publish` - to publish the production version
 
-package name will be: @apimarket/apimarket@{version}
+package name will be: @apimarket/apimarket-server@{version}
