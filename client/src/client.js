@@ -1,12 +1,24 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
-const base32 = require('base32')
+const Base64 = require('js-base64').Base64;
 const ecc = require('eosjs-ecc')
 const hash = require('hash.js')
+const semver = require('semver');
+var URL = require('url').URL
 const {
   Orejs,
   crypto
-} = require('orejs')
+} = require('@open-rights-exchange/orejs')
+const engines = require('../package').engines;
+const version = engines.node;
+
+// check node version when running the client within a node application
+if (process.version.length != 0) {
+  if (!semver.satisfies(process.version, version)) {
+    throw new Error(`Required node version ${version} not satisfied with current version ${process.version}.`);
+  }
+}
+
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const uuidv1 = require('uuid/v1');
 
@@ -32,20 +44,10 @@ class ApiMarketClient {
       verifierAccountName,
       verifierAuthKey
     } = config
+
     var errorMessage = ''
 
-    //decode verifierAuthKey
-    try {
-      config.verifierAuthKey = base32.decode(verifierAuthKey)
-    } catch (error) {
-      let errMsg = `decode error: ${error.message}`
-      if (error.message == 'Non-base58 character') {
-        errMsg = `Problem decoding the verifierAuthKey. Make sure to download the correct config file from api.market.`
-      }
-      throw new Error(`${errMsg} ${error}`)
-    }
-
-    if (config.verifierAuthKey.length == 0) {
+    if (!verifierAuthKey) {
       errorMessage += `\n --> VerifierAuthKey is missing or invalid. Download the API's config file from api.market.`
     }
 
@@ -60,6 +62,18 @@ class ApiMarketClient {
 
     if (errorMessage != '') {
       throw new Error(`Config file (e.g., apimarket_config.json) is missing or has bad values. ${errorMessage}`)
+    }
+
+    //decode verifierAuthKey
+    try {
+      config.verifierAuthKey = Base64.decode(verifierAuthKey)
+    } catch (error) {
+
+      let errMsg = `decode error: ${error.message}`
+      if (error.message == 'Non-base58 character') {
+        errMsg = `Problem decoding the verifierAuthKey. Make sure to download the correct config file from api.market.`
+      }
+      throw new Error(`${errMsg} ${error}`)
     }
 
     this.config = config
@@ -107,6 +121,7 @@ class ApiMarketClient {
       const {
         oreNetworkUri
       } = await oreNetworkData.json()
+
       if (!oreNetworkUri) {
         throw new Error()
       }
@@ -208,6 +223,7 @@ class ApiMarketClient {
   async getApiVoucherAndRight(apiName) {
     // Call orejs.findInstruments(accountName, activeOnly:true, args:{category:’apiMarket.apiVoucher’, rightName:’xxxx’}) => [apiVouchers]
     const apiVouchers = await this.orejs.findInstruments(this.config.accountName, true, VOUCHER_CATEGORY, apiName)
+
     // Choose one voucher - rules to select between vouchers: use cheapest priced and then with the one that has the earliest endDate
     const apiVoucher = apiVouchers.sort((a, b) => {
       const rightA = this.orejs.getRight(a, apiName)
@@ -283,9 +299,7 @@ class ApiMarketClient {
         url,
         options
       } = await this.getOptions(endpoint, httpMethod, oreAccessToken, requestParameters)
-
       const response = await fetch(url, options)
-
       if (response.headers.get('content-type').includes("application/json")) {
         return response.json()
       } else {
@@ -306,7 +320,12 @@ class ApiMarketClient {
     log("Right to be used :", apiRight)
 
     // Call cpuContract.approve(accountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
-    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu)
+    const memo = "approve CPU transfer for" + this.config.verifierAccountName + uuidv1()
+
+    // Permission name for the account
+    const authorization = "authverifier";
+
+    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu, memo, authorization)
     log("CPU approved for the verifier!")
 
     // Call the verifier to get the access token
@@ -321,7 +340,7 @@ class ApiMarketClient {
     log("OreAccessToken", oreAccessToken)
 
     // add the additional parameters returned from the verifier which are not already there in the client request to the Api provider
-    if (additionalParameters.length != 0) {
+    if (additionalParameters && additionalParameters.length != 0) {
       Object.keys(additionalParameters).map(key => {
         requestParams[key] = additionalParameters[key]
       })
