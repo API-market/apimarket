@@ -4,6 +4,9 @@ const Base64 = require('js-base64').Base64;
 const ecc = require('eosjs-ecc')
 const hash = require('hash.js')
 const semver = require('semver');
+const NodeCache = require("node-cache");
+const accessTokenCache = new NodeCache();
+
 var URL = require('url').URL
 const {
   Orejs,
@@ -237,12 +240,9 @@ class ApiMarketClient {
     }
   }
 
-  async getUrlAndAccessToken(apiVoucher, apiRight, requestParams) {
-    // Call Verifier to get access token
+  async getAccessTokenFromVerifier(apiVoucher, apiRight, encryptedParams) {
     let errorMessage
     let result
-    const params = this.getParams(requestParams)
-    const encryptedParams = this.encryptParams(params)
     const signature = await this.orejs.signVoucher(apiVoucher.id)
     const options = {
       method: 'POST',
@@ -291,6 +291,25 @@ class ApiMarketClient {
       additionalParameters
     }
   }
+
+  async getUrlAndAccessToken(apiVoucher, apiRight, requestParams) {
+    // Call Verifier to get access token
+    const params = this.getParams(requestParams)
+    const encryptedParams = this.encryptParams(params)
+    const cachedAccessToken = accessTokenCache.get(hash.sha256().update(encryptedParams).digest('hex'))
+
+    // check if an ore-access-token exist in the cache for the given combination of apiVoucher, apiRight and request parameters
+    if (cachedAccessToken == undefined) {
+      const verifierResult = await this.getAccessTokenFromVerifier(apiVoucher, apiRight, encryptedParams);
+      const cacheKey = encryptedParams
+      cacheKey["apiRight"] = apiRight.right_name
+      accessTokenCache.set(hash.sha256().update(cacheKey).digest('hex'), verifierResult, verifierResult.accessTokenTimeout)
+      return verifierResult
+    } else {
+      return cachedAccessToken
+    }
+  }
+
 
   async callApiEndpoint(endpoint, httpMethod, requestParameters, oreAccessToken) {
     // Makes request to url with accessToken marked ore-authorization in header and returns results
