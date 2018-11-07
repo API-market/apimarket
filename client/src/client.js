@@ -2,23 +2,33 @@ const fs = require('fs')
 const fetch = require('node-fetch')
 const Base64 = require('js-base64').Base64;
 const ecc = require('eosjs-ecc')
-const hash = require('hash.js')
-const {
-  Orejs,
-  crypto
-} = require('@open-rights-exchange/orejs')
 const semver = require('semver');
+const NodeCache = require("node-cache");
+const accessTokenCache = new NodeCache();
+const {
+  log,
+  encryptParams,
+  getTokenAmount
+} = require("./helpers.js")
+
+var URL = require('url').URL
+const {
+  Orejs
+} = require('@open-rights-exchange/orejs')
+
 const engines = require('../package').engines;
 const version = engines.node;
 
-if (!semver.satisfies(process.version, version)) {
-  throw new Error(`Required node version ${version} not satisfied with current version ${process.version}.`);
+// check node version when running the client within a node application
+if (process.version.length != 0) {
+  if (!semver.satisfies(process.version, version)) {
+    throw new Error(`Required node version ${version} not satisfied with current version ${process.version}.`);
+  }
 }
 
 const VOUCHER_CATEGORY = "apimarket.apiVoucher"
 const uuidv1 = require('uuid/v1');
 
-const TRACING = false //enable when debugging to see detailed outputs
 
 class ApiMarketClient {
   constructor(config) {
@@ -40,20 +50,10 @@ class ApiMarketClient {
       verifierAccountName,
       verifierAuthKey
     } = config
+
     var errorMessage = ''
 
-    //decode verifierAuthKey
-    try {
-      config.verifierAuthKey = Base64.decode(verifierAuthKey)
-    } catch (error) {
-      let errMsg = `decode error: ${error.message}`
-      if (error.message == 'Non-base58 character') {
-        errMsg = `Problem decoding the verifierAuthKey. Make sure to download the correct config file from api.market.`
-      }
-      throw new Error(`${errMsg} ${error}`)
-    }
-
-    if (config.verifierAuthKey.length == 0) {
+    if (!verifierAuthKey) {
       errorMessage += `\n --> VerifierAuthKey is missing or invalid. Download the API's config file from api.market.`
     }
 
@@ -68,6 +68,18 @@ class ApiMarketClient {
 
     if (errorMessage != '') {
       throw new Error(`Config file (e.g., apimarket_config.json) is missing or has bad values. ${errorMessage}`)
+    }
+
+    //decode verifierAuthKey
+    try {
+      config.verifierAuthKey = Base64.decode(verifierAuthKey)
+    } catch (error) {
+
+      let errMsg = `decode error: ${error.message}`
+      if (error.message == 'Non-base58 character') {
+        errMsg = `Problem decoding the verifierAuthKey. Make sure to download the correct config file from api.market.`
+      }
+      throw new Error(`${errMsg} ${error}`)
     }
 
     this.config = config
@@ -161,15 +173,6 @@ class ApiMarketClient {
     }
   }
 
-
-  encryptParams(params) {
-    let encryptedParams = {}
-    Object.keys(params).map(key => {
-      encryptedParams[key] = hash.sha256().update(params[key]).digest('hex')
-    })
-    return encryptedParams
-  }
-
   async getOptions(endpoint, httpMethod, oreAccessToken, requestParameters) {
     let options
     let url
@@ -231,19 +234,16 @@ class ApiMarketClient {
     }
   }
 
-  async getUrlAndAccessToken(apiVoucher, apiRight, requestParams) {
-    // Call Verifier to get access token
+  async getAccessTokenFromVerifier(apiVoucher, apiRight, encryptedParams) {
     let errorMessage
     let result
-    const params = this.getParams(requestParams)
-    const encryptedParams = this.encryptParams(params)
     const signature = await this.orejs.signVoucher(apiVoucher.id)
     const options = {
       method: 'POST',
       body: JSON.stringify({
         requestParams: encryptedParams,
         rightName: apiRight.right_name,
-        signature: signature,
+        signature,
         voucherId: apiVoucher.id
       }),
       headers: {
@@ -265,7 +265,8 @@ class ApiMarketClient {
       endpoint,
       oreAccessToken,
       method,
-      additionalParameters
+      additionalParameters,
+      accessTokenTimeout
     } = await result.json()
 
     if (!oreAccessToken || oreAccessToken === undefined) {
@@ -282,9 +283,51 @@ class ApiMarketClient {
       endpoint,
       oreAccessToken,
       method,
-      additionalParameters
+      additionalParameters,
+      accessTokenTimeout,
     }
   }
+
+  async getUrlAndAccessToken(apiVoucher, apiRight, apiCallPrice, requestParams) {
+    // Call Verifier to get access token
+    let accessToken
+    let cached
+    const params = this.getParams(requestParams)
+    const encryptedParams = encryptParams(params)
+
+    var hash = require('object-hash');
+
+
+    const cacheKeyParams = Object.assign({}, encryptedParams)
+    cacheKeyParams["right"] = apiRight.right_name
+
+    // key for the cached data
+    const hashedCacheKey = hash(cacheKeyParams)
+    const cachedAccessToken = accessTokenCache.get(hashedCacheKey)
+
+    // check if the accesstoken can be cached
+    if (apiCallPrice !== "0.0000 CPU") {
+      accessToken = await this.getAccessTokenFromVerifier(apiVoucher, apiRight, encryptedParams);
+      cached = false
+    } else {
+      // check if accesstoken for the client request exists in the cache or not 
+      if (cachedAccessToken === undefined) {
+        accessToken = await this.getAccessTokenFromVerifier(apiVoucher, apiRight, encryptedParams);
+
+        // set the "time to live" for the cached token to be equal to the accessTokenTimeout of the ore-access-token
+        accessTokenCache.set(hashedCacheKey, accessToken, accessToken.accessTokenTimeout)
+        cached = false
+      } else {
+        accessToken = cachedAccessToken
+        cached = true
+      }
+    }
+    return {
+      accessToken,
+      cached
+    }
+  }
+
 
   async callApiEndpoint(endpoint, httpMethod, requestParameters, oreAccessToken) {
     // Makes request to url with accessToken marked ore-authorization in header and returns results
@@ -293,9 +336,7 @@ class ApiMarketClient {
         url,
         options
       } = await this.getOptions(endpoint, httpMethod, oreAccessToken, requestParameters)
-
       const response = await fetch(url, options)
-
       if (response.headers.get('content-type').includes("application/json")) {
         return response.json()
       } else {
@@ -304,6 +345,26 @@ class ApiMarketClient {
     } catch (error) {
       throw new Error(`Api Endpoint Error: ${error.message}`)
     }
+  }
+
+  async postUsageLog(apiVoucherId, rightName, oreAccessToken, apiCallPrice) {
+    // posts the usage details for a voucher to the verifier
+    // NOTE: this is called only when the API call cost is 0
+    const signature = await this.orejs.signVoucher(apiVoucherId)
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({
+        rightName,
+        oreAccessToken,
+        signature,
+        voucherId: apiVoucherId,
+        amount: apiCallPrice
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    await fetch(`${this.config.verifier}/update-usage`, options)
   }
 
   async fetch(apiName, requestParams) {
@@ -315,22 +376,31 @@ class ApiMarketClient {
     log("Voucher purchased :", apiVoucher)
     log("Right to be used :", apiRight)
 
-    // Call cpuContract.approve(accountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
-    const memo = "approve CPU transfer for" + this.config.verifierAccountName + uuidv1()
+    const apiCallPrice = getTokenAmount(apiRight.price_in_cpu)
 
-    // Permission name for the account
-    const authorization = "authverifier";
+    if (apiCallPrice != "0.0000 CPU") {
+      // Call cpuContract.approve(accountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
+      const memo = "approve CPU transfer for" + this.config.verifierAccountName + uuidv1()
 
-    await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiRight.price_in_cpu, memo, authorization)
-    log("CPU approved for the verifier!")
+      // Permission name for the account
+      const authorization = "authverifier";
 
-    // Call the verifier to get the access token
+      await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiCallPrice, memo, authorization)
+      log("CPU approved for the verifier!")
+    }
+
+    // Call the verifier to get a new access token or get the cached access token
+    const {
+      accessToken,
+      cached
+    } = await this.getUrlAndAccessToken(apiVoucher, apiRight, apiCallPrice, requestParams)
+
     const {
       endpoint,
       oreAccessToken,
       method,
       additionalParameters
-    } = await this.getUrlAndAccessToken(apiVoucher, apiRight, requestParams)
+    } = accessToken
 
     log("Url:", endpoint)
     log("OreAccessToken", oreAccessToken)
@@ -342,6 +412,11 @@ class ApiMarketClient {
       })
     }
 
+    // Call the verifier to update usage log if the api call cost is 0 and client is using cached token
+    if (cached === true && apiCallPrice === "0.0000 CPU") {
+      this.postUsageLog(apiVoucher.id, apiRight.right_name, JSON.stringify(oreAccessToken), apiCallPrice)
+    }
+
     // Call the api
     const response = await this.callApiEndpoint(endpoint, method, requestParams, oreAccessToken)
     return response
@@ -350,10 +425,4 @@ class ApiMarketClient {
 
 module.exports = {
   ApiMarketClient
-}
-
-function log(message, data) {
-  if (TRACING == true) {
-    console.log(message, data)
-  }
 }
