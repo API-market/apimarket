@@ -1,7 +1,7 @@
 /* helper functions 
  */
 const hash = require("hash.js")
-const TRACING = true //enable when debugging to see detailed outputs
+const TRACING = false //enable when debugging to see detailed outputs
 
 // log data 
 function log(message, data) {

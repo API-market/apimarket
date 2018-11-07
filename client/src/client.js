@@ -243,7 +243,7 @@ class ApiMarketClient {
       body: JSON.stringify({
         requestParams: encryptedParams,
         rightName: apiRight.right_name,
-        signature: signature,
+        signature,
         voucherId: apiVoucher.id
       }),
       headers: {
@@ -354,9 +354,9 @@ class ApiMarketClient {
     const options = {
       method: 'POST',
       body: JSON.stringify({
-        rightName: rightName,
-        oreAccessToken: oreAccessToken,
-        signature: signature,
+        rightName,
+        oreAccessToken,
+        signature,
         voucherId: apiVoucherId,
         amount: apiCallPrice
       }),
