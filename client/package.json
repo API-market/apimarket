@@ -1,6 +1,6 @@
 {
   "name": "@apimarket/apimarket",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "engines": {
     "node": ">=7.6.0"
   },
@@ -26,7 +26,7 @@
   "homepage": "https://github.com/api-market/apimarket#readme",
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.42",
-    "@open-rights-exchange/orejs": "1.1.0",
+    "@open-rights-exchange/orejs": "1.2.1",
     "axios": "^0.16.2",
     "body-parser": "^1.18.2",
     "cookie-parse": "^0.4.0",
