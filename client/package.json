@@ -27,6 +27,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "@open-rights-exchange/orejs": "1.2.1",
+    "babel-preset-env": "^1.7.0",
     "eosjs-ecc": "^4.0.4",
     "hash.js": "^1.1.5",
     "js-base64": "^2.4.9",
