@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/api-market/apimarket#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "@open-rights-exchange/orejs": "1.2.1",
     "eosjs-ecc": "^4.0.4",
     "hash.js": "^1.1.5",
@@ -36,7 +37,8 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0"
   }
 }
