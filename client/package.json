@@ -7,7 +7,7 @@
   "description": "Client library for api.market",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "babel . --ignore node_modules,dist --out-dir dist && npm run copyfiles && npm run copypackagejson",
+    "build": "babel . --ignore node_modules,dist,example/node_modules --out-dir dist && npm run copyfiles && npm run copypackagejson",
     "copyfiles": "cp ./example/apimarket_config.example.json ./example/package.json ./dist/example/",
     "copypackagejson": "cp ./package.json ./dist/",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
