@@ -1,157 +1,131 @@
-const fs = require('fs')
 const fetch = require('node-fetch')
 const Base64 = require('js-base64').Base64;
 const ecc = require('eosjs-ecc')
 const semver = require('semver');
 const NodeCache = require("node-cache");
+const { Orejs } = require('@open-rights-exchange/orejs')
+const URL = require('url').URL
+const uuidv1 = require('uuid/v1');
+const packageJson = require('../package');  //package.json
+
+const { log, encryptParams, getTokenAmount } = require("./helpers.js");
+
+const requiredNodeVersion = packageJson.engines.node;
 const accessTokenCache = new NodeCache();
-const {
-  log,
-  encryptParams,
-  getTokenAmount
-} = require("./helpers.js")
 
-var URL = require('url').URL
-const {
-  Orejs
-} = require('@open-rights-exchange/orejs')
+const DEFAULT_INSTRUMENT_CATEGORY = "apimarket.apiVoucher";
+const VERIFIER_APPROVE_PERMISSION = "authverifier";
 
-const engines = require('../package').engines;
-const version = engines.node;
-
-// check node version when running the client within a node application
+// if running under a Node application, check node version meets required minimum
 if (process.version.length != 0) {
-  if (!semver.satisfies(process.version, version)) {
-    throw new Error(`Required node version ${version} not satisfied with current version ${process.version}.`);
+  if (!semver.satisfies(process.version, requiredNodeVersion)) {
+    throw new Error(`Required node version ${requiredNodeVersion} not satisfied with current version ${process.version}.`);
   }
 }
 
-const VOUCHER_CATEGORY = "apimarket.apiVoucher"
-const uuidv1 = require('uuid/v1');
-
-
 class ApiMarketClient {
+
   constructor(config) {
-    // config path defaults to the current working directory
-    this.loadConfig(config)
-  }
-
-  //load config data from file and valiate entries
-  loadConfig(config) {
-
-    //make sure config data exists
-    if (!config) {
-      throw new Error(`Config data is missing. You can downloaded the file (from api.market) with the required settings for an api.`)
-    }
-
-    var {
-      accountName,
-      verifier,
-      verifierAccountName,
-      verifierAuthKey
-    } = config
-
-    var errorMessage = ''
-
-    if (!verifierAuthKey) {
-      errorMessage += `\n --> VerifierAuthKey is missing or invalid. Download the API's config file from api.market.`
-    }
-
-    //confirm other config values are present
-    if (!accountName) {
-      errorMessage += `\n --> Missing accountName. Download the API's config file from api.market.`
-    }
-
-    if (!verifier || !verifierAccountName) {
-      errorMessage += `\n --> Missing verifier or verifierAccountName. Download the API's config file from api.market - it will include these values.`
-    }
-
-    if (errorMessage != '') {
-      throw new Error(`Config file (e.g., apimarket_config.json) is missing or has bad values. ${errorMessage}`)
-    }
-
-    //decode verifierAuthKey
-    try {
-      config.verifierAuthKey = Base64.decode(verifierAuthKey)
-    } catch (error) {
-
-      let errMsg = `decode error: ${error.message}`
-      if (error.message == 'Non-base58 character') {
-        errMsg = `Problem decoding the verifierAuthKey. Make sure to download the correct config file from api.market.`
-      }
-      throw new Error(`${errMsg} ${error}`)
-    }
-
-    this.config = config
-
+    this.config = this.validateConfig(config);
   }
 
   //connect to the ORE blockchain
   connect() {
     return new Promise((resolve, reject) => {
       (async () => {
-        await this.getDetailsFromChain(reject)
-        this.orejs = new Orejs({
-          httpEndpoint: this.oreNetworkUri,
-          chainId: this.OreChainId,
-          keyProvider: [this.config.verifierAuthKey.toString()],
-          oreAuthAccountName: this.config.accountName,
-          sign: true
-        })
-        await this.checkVerifierAuthKey(this.config.accountName, this.config.verifierAuthKey, reject)
-        resolve(this)
-
+        try {
+          const {oreHttpEndpoint, oreChainId} = await this.getDetailsFromChain();
+          //create instance of orejs
+          this.orejs = new Orejs({
+            httpEndpoint: oreHttpEndpoint,
+            chainId: oreChainId,
+            keyProvider: [this.config.decodedVerifierAuthKey.toString()],
+            oreAuthAccountName: this.config.accountName,
+            sign: true
+          });
+          await this.validateVerifierAuthKey();
+          resolve(this);
+        } catch (error) {
+          reject(error);
+        }
       })();
     });
   }
 
-  async checkVerifierAuthKey(accountName, verifierAuthKey, reject) {
+  // Validate and extend config data 
+  validateConfig(configData) {
+    var { accountName, verifier, verifierAccountName, verifierAuthKey, instrumentCategory } = configData || {};
+
+    if (!accountName || !verifier || !verifierAccountName || !verifierAuthKey) {
+      throw new Error(`Problem with config: There is one or more missing required values.`);
+    }
+
+    if(!instrumentCategory) {
+      configData.instrumentCategory = DEFAULT_INSTRUMENT_CATEGORY
+    }
+
+    //verifierAuthKey is base64 encoded
     try {
-      // check if the verifierAuthKey belongs to the account name in the config file 
-      const verifierAuthPubKey = await ecc.privateToPublic(verifierAuthKey.toString())
-      const isValidKey = await this.orejs.checkPubKeytoAccount(accountName, verifierAuthPubKey)
-      if (!isValidKey) {
-        throw new Error(`VerifierAuthKey does not belong to the accountName. Make sure to download the correct config file from api.market.`)
-      }
+      configData.decodedVerifierAuthKey = Base64.decode(verifierAuthKey);
+    } 
+    catch (error) {
+      throw new Error(`Problem with config: Couldn't decode the verifierAuthKey : ${error}`);
+    }
+
+    return configData;
+
+  }
+
+  /* confirm that verifierAuthKey is a valid private key
+    ...and that it belongs to the account name in the config file  */
+  async validateVerifierAuthKey() {
+    const {accountName, verifierAuthKey} = this.config;
+    var verifierAuthPubKey;
+
+    try {
+      verifierAuthPubKey = await ecc.privateToPublic(this.config.decodedVerifierAuthKey.toString());
     } catch (error) {
-      reject(error)
+      throw new Error(`Problem with config: VerifierAuthKey (after being decoded) isn't a valid private key.`);
+    }
+    const isValidKey = await this.orejs.checkPubKeytoAccount(accountName, verifierAuthPubKey);
+    if (!isValidKey) {
+      throw new Error(`Problem with config: VerifierAuthKey must be a key associated with the provided accountName.`);
     }
   }
 
   //use verifier discovery endpoint to retrieve ORE node address and chainId
-  async getDetailsFromChain(reject) {
-
+  async getDetailsFromChain() {
+    let oreHttpEndpoint, oreChainId;
     //get ORE blockchain URL from verifier discovery endpoint
+    var errMsg = `ORE Blockchain: Problem retrieving ORE address from verifier discovery endpoint. Config expects a verifier running here: ${this.config.verifier}.`
     try {
-      const oreNetworkData = await fetch(`${this.config.verifier}/discovery`)
-      const {
-        oreNetworkUri
-      } = await oreNetworkData.json()
-
-      if (!oreNetworkUri) {
-        throw new Error()
+      const oreNetworkData = await fetch(`${this.config.verifier}/discovery`);
+      const { oreNetworkUri } = await oreNetworkData.json();
+      oreHttpEndpoint = oreNetworkUri;
+      if (!oreHttpEndpoint) {
+        throw new Error(errMsg);
       }
-      this.oreNetworkUri = oreNetworkUri
     } catch (error) {
-      const errorMessage = `Problem retrieving ORE address from verifier discovery endpoint. Config file expects a verifier running here: ${this.config.verifier}. ${error}`
-      reject(errorMessage)
+      throw new Error(`${errMsg}: ${error}`);
     }
 
     //get chainId from ORE blockchain
+    errMsg = `ORE Blockchain: Problem retrieving info from the ORE blockchain. Config file expects an ORE node running here: ${oreHttpEndpoint}.`;
     try {
-      const oreInfoEndpoint = `${this.oreNetworkUri}/v1/chain/get_info`
-      const oreNetworkInfo = await fetch(oreInfoEndpoint)
-      const {
-        chain_id
-      } = await oreNetworkInfo.json()
-      if (!chain_id) {
-        throw new Error()
+      const oreInfoEndpoint = `${oreHttpEndpoint}/v1/chain/get_info`;
+      const oreNetworkInfo = await fetch(oreInfoEndpoint);
+      const { chain_id } = await oreNetworkInfo.json();
+      oreChainId = chain_id;
+      if (!oreChainId) {
+        throw new Error(errMsg);
       }
-      this.OreChainId = chain_id
     } catch (error) {
-      const errMsg = `Problem retrieving info from the ORE blockchain. Config file expects an ORE node running here: ${this.oreNetworkUri}. ${error}`
-      reject(error)
+      throw new Error(`${errMsg}: ${error}`);
     }
+
+    //return data
+    return {oreHttpEndpoint, oreChainId};
+
   }
 
   // append url/body to the parameter name to be able to distinguish b/w url and body parameters
@@ -218,8 +192,8 @@ class ApiMarketClient {
   }
 
   async getApiVoucherAndRight(apiName) {
-    // Call orejs.findInstruments(accountName, activeOnly:true, args:{category:’apiMarket.apiVoucher’, rightName:’xxxx’}) => [apiVouchers]
-    const apiVouchers = await this.orejs.findInstruments(this.config.accountName, true, VOUCHER_CATEGORY, apiName)
+    // Call orejs.findInstruments(accountName, activeOnly:true, category:’apiMarket.apiVoucher’, rightName:’xxxx’) => [apiVouchers]
+    const apiVouchers = await this.orejs.findInstruments(this.config.accountName, true, this.config.instrumentCategory, apiName)
 
     // Choose one voucher - rules to select between vouchers: use cheapest priced and then with the one that has the earliest endDate
     const apiVoucher = apiVouchers.sort((a, b) => {
@@ -381,11 +355,7 @@ class ApiMarketClient {
     if (apiCallPrice != "0.0000 CPU") {
       // Call cpuContract.approve(accountName, cpuAmount) to designate amount to allow payment in cpu for the api call (from priceInCPU in the apiVoucher’s right for the specific endpoint desired)
       const memo = "approve CPU transfer for" + this.config.verifierAccountName + uuidv1()
-
-      // Permission name for the account
-      const authorization = "authverifier";
-
-      await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiCallPrice, memo, authorization)
+      await this.orejs.approveCpu(this.config.accountName, this.config.verifierAccountName, apiCallPrice, memo, VERIFIER_APPROVE_PERMISSION)
       log("CPU approved for the verifier!")
     }
 
