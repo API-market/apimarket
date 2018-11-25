@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/api-market/apimarket#readme",
   "dependencies": {
-    "@babel/polyfill": "^7.0.0-beta.42",
+    "@babel/polyfill": "^7.0.0",
     "analytics-node": "^3.3.0",
     "axios": "^0.16.2",
     "base-64": "^0.1.0",
@@ -38,8 +38,8 @@
     "url-polyfill": "^1.0.11"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.42",
-    "@babel/core": "^7.0.0-beta.42",
-    "@babel/preset-env": "^7.0.0-beta.42"
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0"
   }
 }
