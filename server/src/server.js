@@ -6,8 +6,6 @@ const hash = require('hash.js');
 const sortJson = require('sort-json');
 const { logError } = require('./logging');
 
-console.log(`started`)
-
 // append url/body to the parameter name to be able to distinguish b/w url and body parameters
 function getParams(requestParams) {
   let params = {}
