@@ -1,38 +1,50 @@
 /*
-example server with api.market middleware
+    Example server demonstrating api.market middleware
 */
-require('dotenv').config()
-const express = require('express')
-const cookieParser = require('cookie-parser')
-const bodyParser = require('body-parser')
-const {
-    apiMarketRequestValidator
-} = require('../lib/server')
 
-const app = express()
-const PORT = process.env.PORT || 8080
+const dotenv = require('dotenv');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const { apiMarketRequestValidator } = require('../lib/server');
 
+dotenv.config();
+const PORT = process.env.PORT || 8080;
 
-app.use(bodyParser.json())
+const app = express();
+var counter = 0;
+
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
-}))
-app.use(cookieParser())
-app.use(apiMarketRequestValidator())
+}));
+app.use(cookieParser());
 
-const handler = async (req, res) => {
-    res.json({
-        x: req.body.x + 1
-    })
-}
+// This middleware confirms that the incoming request is valid. It checks:
+// 1) Request Header includes an ore-access-token signed by a valid Verifier key
+// 2) Request parameters match those authorized by the verfier (and encoded by hash in the ore-access-token)
+// 3) The ore-access-token hasn't expired
+// If any checks above fail, an error will be returned and the request aborted
+// app.use(apiMarketRequestValidator());
 
-app.post('/', handler)
+// As an alternative to using the middleware, you can call checkOreAccessToken(req.headers['ore-access-token']) 
+// ...It will return true if all is good or throw an error otherwise
 
-// catch 404 and forward to error handler
+// Handle 'count' route
+app.post('/count', handleCount);
+
+// Handle all other routes by returing a 404 - Not Found
 app.use(function (req, res, next) {
-    var err = new Error('Not Found')
-    err.status = 404
-    next(err)
+    var err = new Error(`Route not found`);
+    err.status = 404;
+    next(err);
 })
+
+//Example function - just increments a counter by 'incrementBy' passed-in as body parameter
+async function handleCount(req, res) {
+    const incrementBy = (req.body && req.body.incrementBy) ? parseInt(req.body.incrementBy) : 1;
+    counter += incrementBy;
+    res.json({counter});
+}
 
 app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`))

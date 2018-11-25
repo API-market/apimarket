@@ -1,17 +1,19 @@
-# About
+## About
 
-This folder contains 2 example servers using api.market server library
+This is an example NodeJS Express server 
+It uses the server library to check that incoming requests have a valid ore-access-token
 
-# Usage
+You can ore-enable any Express Server by just adding the `apiMarketRequestValidator()` middleware to the express request pipeline.
 
-To run an example server with api.market middleware 
+Or, you can check for a valid token yourself using the `checkOreAccessToken()` function.
+
+## Usage
+
+To run the example server you must have an .env file in the root of the project. 
+Copy the .env.example to .env and update the values if needed.
+See comments in the code for other usage info.
 
 ```
-node server.js
-```
-
-To run an example server without api.market middleware and just using checkOreAccessToken function from the library
-
-```
-node server1.js
+npm install
+npm start
 ```
