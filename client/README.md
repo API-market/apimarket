@@ -18,7 +18,8 @@ An example configuration file looks like:
   "accountName": "ajscf...",
   "verifierAuthKey": "U2Fsd...",
   "verifier": "https...",
-  "verifierAccountName": "verif..."
+  "verifierAccountName": "verif...",
+  "instrumentCategory": "apimarket.apiVoucher"
 }
 ```
 
