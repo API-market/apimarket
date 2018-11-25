@@ -1,7 +1,7 @@
 const {
   apiMarketRequestValidator,
   checkOreAccessToken
-} = require('./lib/server')
+} = require('./src/server');
 
 module.exports = {
   apiMarketRequestValidator,

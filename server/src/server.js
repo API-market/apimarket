@@ -1,12 +1,12 @@
-require('dotenv').config()
-const analyticsEvent = require(__dirname + "/segment")
-const ecc = require('eosjs-ecc')
-const jwt = require('jsonwebtoken')
-const hash = require('hash.js')
-const sortJson = require('sort-json')
-const {
-  logError
-} = require('./logging')
+require('dotenv').config();
+const analyticsEvent = require(__dirname + "/segment");
+const ecc = require('eosjs-ecc');
+const jwt = require('jsonwebtoken');
+const hash = require('hash.js');
+const sortJson = require('sort-json');
+const { logError } = require('./logging');
+
+console.log(`started`)
 
 // append url/body to the parameter name to be able to distinguish b/w url and body parameters
 function getParams(requestParams) {
