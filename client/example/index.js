@@ -1,38 +1,40 @@
-const {
-  ApiMarketClient
-} = require('@apimarket/apimarket')
+const { ApiMarketClient } = require('@apimarket/apimarket');
 
-const configFile = require("../example/apimarket_config.json");
+const configFile = require("./apimarket_config.json");
 
 const run = async () => {
   try {
-    //Config to apimarketClient and connect to ORE blockchain
+    //Initialize the ApiMarketClient with the credentials needed to connect to the ORE blockchain
     let apimarketClient = new ApiMarketClient(configFile);
-    await apimarketClient.connect()
+    await apimarketClient.connect();
 
     //specify the api to call using it's unique name registered on the ORE blockchain
-    const apiName = "cloud.hadron.imageRecognize"
+    const apiName = "cloud.hadron.imageRecognize";
 
-    //call api - passing in the data it needs
-    const params = {
-      "imageurl": "https://storage.googleapis.com/partner-aikon.appspot.com/partner-hadron-transferLearning-v1-deepspace.jpg",
-    }
-
-    // use both the http-body-params and http-url-params to pass the parameters if both query and body parameters exist. Otherwise just pass the parameters to the apimarketClient.fetch directly.
-    // for example - 
+    // HOW TO PASS PARAMETERS
+    // Pass the parameters for the GET or POST request in as a JSON object 
+    // If all the parameters are query parameters (for a GET) or body parameters (for a POST), just pass in the param names
+    // However, if some params are query params and some are body params, you must designate both groups as below:
+    //
     // "httpBodyParams": {
     //   "imageurl": "https://console.cloud.google.com/storage/browser/apimarket-contest-2018-07-1-coffee/10465_full_jpg.jpg"
     // },
     // "httpUrlParams": {
-    //   "env": "staging"
+    //   "regionCode": "en_us"
     // }
 
-    const response = await apimarketClient.fetch(apiName, params)
-    console.log(JSON.stringify(response, null, 2))
+    const params = {
+      "imageurl": "https://storage.googleapis.com/partner-aikon.appspot.com/partner-hadron-transferLearning-v1-deepspace.jpg",
+    }
+
+    // Ask the apiMarketClient to make the HTTP request. It will construct the HTTP request and add the parameters. 
+    // ...it will also add an ore-access-token in the header of the request
+    const response = await apimarketClient.fetch(apiName, params);
+    console.log(JSON.stringify(response, null, 2));
 
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 }
 
-run()
+run();
