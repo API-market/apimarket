@@ -26,7 +26,7 @@ app.use(cookieParser());
 // 2) Request parameters match those authorized by the verfier (and encoded by hash in the ore-access-token)
 // 3) The ore-access-token hasn't expired
 // If any checks above fail, an error will be returned and the request aborted
-// app.use(apiMarketRequestValidator());
+app.use(apiMarketRequestValidator());
 
 // As an alternative to using the middleware, you can call checkOreAccessToken(req.headers['ore-access-token']) 
 // ...It will return true if all is good or throw an error otherwise
