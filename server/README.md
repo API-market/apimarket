@@ -15,9 +15,9 @@ VERIFIER_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\nMFkw....==\n-----END PUBLIC KEY
 With the verifier public key in the env file, supply an Express-style HTTP handler that services your API. Only valid requests will be served
 
 ```javascript
-const { apiMarketRequestValidator } = require('@open-rights-exchange/server')
+const { oreRequestValidator } = require('@open-rights-exchange/server')
 
-app.use(apiMarketRequestValidator())
+app.use(oreRequestValidator())
 
 ```
 
@@ -25,7 +25,7 @@ app.use(apiMarketRequestValidator())
 With the verifier public key in the env file, use the checkOreAccessToken function of the library
 
 ```javascript
-const { apiMarketRequestValidator } = require('@open-rights-exchange/server')
+const { oreRequestValidator } = require('@open-rights-exchange/server')
 
 const isValidOreAcessToken = await checkOreAccessToken(req.headers['ore-access-token'], req)
 ```

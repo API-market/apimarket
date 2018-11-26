@@ -99,7 +99,7 @@ async function checkOreAccessToken(oreAccessToken, req) {
 }
 
 // export as a middleware
-function apiMarketRequestValidator() {
+function oreRequestValidator() {
   let errMsg = '';
   return async (req, res, next) => {
     try {
@@ -140,6 +140,6 @@ function apiMarketRequestValidator() {
 }
 
 module.exports = {
-  apiMarketRequestValidator,
+  oreRequestValidator,
   checkOreAccessToken
 }

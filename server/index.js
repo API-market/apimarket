@@ -1,9 +1,9 @@
 const {
-  apiMarketRequestValidator,
+  oreRequestValidator,
   checkOreAccessToken
 } = require('./src/server');
 
 module.exports = {
-  apiMarketRequestValidator,
+  oreRequestValidator,
   checkOreAccessToken
 }

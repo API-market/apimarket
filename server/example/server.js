@@ -6,8 +6,8 @@ const dotenv = require('dotenv');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const { apiMarketRequestValidator } = require('@open-rights-exchange/server');
-// const { apiMarketRequestValidator } = require('../src/server');
+const { oreRequestValidator } = require('@open-rights-exchange/server');
+//const { oreRequestValidator } = require('../src/server');
 
 dotenv.config();
 const PORT = process.env.PORT || 8080;
@@ -26,7 +26,7 @@ app.use(cookieParser());
 // 2) Request parameters match those authorized by the verfier (and encoded by hash in the ore-access-token)
 // 3) The ore-access-token hasn't expired
 // If any checks above fail, an error will be returned and the request aborted
-app.use(apiMarketRequestValidator());
+app.use(oreRequestValidator());
 
 // As an alternative to using the middleware, you can call checkOreAccessToken(req.headers['ore-access-token']) 
 // ...It will return true if all is good or throw an error otherwise
