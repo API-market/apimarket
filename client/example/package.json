@@ -9,6 +9,6 @@
 	"author": "Open Rights Exchange",
 	"license": "MIT",
 	"dependencies": {
-		"@open-rights-exchange/client": "^1.0.5"
+		"@open-rights-exchange/client": "^1.0.0"
 	}
 }

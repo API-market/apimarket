@@ -1,5 +1,5 @@
 /*
-    Example server demonstrating api.market middleware
+    Example server demonstrating Open Rights Exchange middleware
 */
 
 const dotenv = require('dotenv');

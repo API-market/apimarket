@@ -1,3 +1,3 @@
 # About
 
-API Market documentation
+Open Rights Exchange documentation
