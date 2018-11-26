@@ -6,8 +6,8 @@ const dotenv = require('dotenv');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-// const { apiMarketRequestValidator } = require('@apimarket/apimarket-server');
-const { apiMarketRequestValidator } = require('../src/server');
+const { apiMarketRequestValidator } = require('@open-rights-exchange/server');
+// const { apiMarketRequestValidator } = require('../src/server');
 
 dotenv.config();
 const PORT = process.env.PORT || 8080;

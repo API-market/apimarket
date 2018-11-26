@@ -1,7 +1,7 @@
 {
-  "name": "@apimarket/apimarket-server",
+  "name": "@open-rights-exchange/server",
   "version": "1.0.0",
-  "description": "Server library for api.market",
+  "description": "Server library for ORE Protocol",
   "main": "./dist/index.js",
   "scripts": {
     "build": "babel . --ignore node_modules,dist,example/node_modules --out-dir dist && npm run copyfiles",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/api-market/apimarket.git"
+    "url": "git+https://github.com/Open-Rights-Exchange/ore-libraries.git"
   },
-  "author": "AIKON",
+  "author": "Open Rights Exchange",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/api-market/apimarket/issues"
+    "url": "https://github.com/Open-Rights-Exchange/ore-libraries/issues"
   },
-  "homepage": "https://github.com/api-market/apimarket#readme",
+  "homepage": "https://github.com/Open-Rights-Exchange/ore-libraries#readme",
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "analytics-node": "^3.3.0",

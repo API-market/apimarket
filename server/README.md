@@ -1,8 +1,6 @@
 # About
 
-This repository contains a library for interacting with the Aikon marketplace.
-
-It wraps the [Open Rights Exchange protocol](https://github.com/api-market/ore-protocol) to simplify the buying and selling of APIs in the marketplace.
+A library for protecting an API with the [Open Rights Exchange protocol](https://github.com/api-market/ore-protocol) 
 
 # Usage
 
@@ -17,7 +15,7 @@ VERIFIER_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\nMFkw....==\n-----END PUBLIC KEY
 With the verifier public key in the env file, supply an Express-style HTTP handler that services your API. Only valid requests will be served
 
 ```javascript
-const { apiMarketRequestValidator } = require('@apimarket/apimarket-server')
+const { apiMarketRequestValidator } = require('@open-rights-exchange/server')
 
 app.use(apiMarketRequestValidator())
 
@@ -27,7 +25,7 @@ app.use(apiMarketRequestValidator())
 With the verifier public key in the env file, use the checkOreAccessToken function of the library
 
 ```javascript
-const { apiMarketRequestValidator } = require('@apimarket/apimarket-server')
+const { apiMarketRequestValidator } = require('@open-rights-exchange/server')
 
 const isValidOreAcessToken = await checkOreAccessToken(req.headers['ore-access-token'], req)
 ```
@@ -50,4 +48,4 @@ To publish an updated package...
 - `npm publish --tag staging` - to publish staging version
 - `npm publish` - to publish the production version
 
-package name will be: @apimarket/apimarket-server@{version}
+package name will be: @open-rights-exchange/server@{version}

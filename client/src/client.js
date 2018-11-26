@@ -24,8 +24,8 @@ if (process.version.length != 0) {
   }
 }
 
-class ApiMarketClient {
-  
+class Client {
+
   constructor(config) {
     this.config = this.validateConfig(config);
   }
@@ -383,5 +383,5 @@ class ApiMarketClient {
 }
 
 module.exports = {
-  ApiMarketClient
+  Client
 }

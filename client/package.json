@@ -1,5 +1,5 @@
 {
-  "name": "@apimarket/apimarket",
+  "name": "@open-rights-exchange/client",
   "version": "1.0.5",
   "engines": {
     "node": ">=7.6.0"
@@ -8,7 +8,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "babel . --ignore node_modules,dist,example/node_modules --out-dir dist && npm run copyfiles && npm run copypackagejson",
-    "copyfiles": "cp ./example/apimarket_config.example.json ./example/package.json ./dist/example/",
+    "copyfiles": "cp ./example/client_config.example.json ./example/package.json ./dist/example/",
     "copypackagejson": "cp ./package.json ./dist/",
     "example:client": "node --trace-warnings ./dist/example/client/index.js",
     "prepublish": "npm run build",
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/api-market/apimarket.git"
+    "url": "git+https://github.com/Open-Rights-Exchange/ore-libraries.git"
   },
-  "author": "AIKON",
+  "author": "Open Rights Exchange",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/api-market/apimarket/issues"
+    "url": "https://github.com/Open-Rights-Exchange/ore-libraries/issues"
   },
-  "homepage": "https://github.com/api-market/apimarket#readme",
+  "homepage": "https://github.com/Open-Rights-Exchange/ore-libraries#readme",
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "@open-rights-exchange/orejs": "1.2.1",

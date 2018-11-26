@@ -1,14 +1,14 @@
 {
-	"name": "apimarket-client-example",
+	"name": "open-rights-exchange-client-example",
 	"version": "1.0.0",
-	"description": "Example for api.market client library",
+	"description": "Example for ORE Protocol client library",
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js"
 	},
-	"author": "AIKON",
+	"author": "Open Rights Exchange",
 	"license": "MIT",
 	"dependencies": {
-		"@apimarket/apimarket": "^1.0.5"
+		"@open-rights-exchange/client": "^1.0.5"
 	}
 }

@@ -1,12 +1,13 @@
-const { ApiMarketClient } = require('@apimarket/apimarket');
+const { Client } = require('@open-rights-exchange/client');
+// const { Client } = require('../src/client');
 
-const configFile = require("./apimarket_config.json");
+const configFile = require("./client_config.json");
 
 const run = async () => {
   try {
-    //Initialize the ApiMarketClient with the credentials needed to connect to the ORE blockchain
-    let apimarketClient = new ApiMarketClient(configFile);
-    await apimarketClient.connect();
+    //Initialize the ORE Client with the credentials needed to connect to the ORE blockchain
+    let client = new Client(configFile);
+    await client.connect();
 
     //specify the api to call using it's unique name registered on the ORE blockchain
     const apiName = "cloud.hadron.imageRecognize";
@@ -27,9 +28,9 @@ const run = async () => {
       "imageurl": "https://storage.googleapis.com/partner-aikon.appspot.com/partner-hadron-transferLearning-v1-deepspace.jpg",
     }
 
-    // Ask the apiMarketClient to make the HTTP request. It will construct the HTTP request and add the parameters. 
+    // Ask the client to make the HTTP request. It will construct the HTTP request and add the parameters. 
     // ...it will also add an ore-access-token in the header of the request
-    const response = await apimarketClient.fetch(apiName, params);
+    const response = await client.fetch(apiName, params);
     console.log(JSON.stringify(response, null, 2));
 
   } catch (error) {

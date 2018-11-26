@@ -1,15 +1,15 @@
 {
-  "name": "apimarket-server-example",
+  "name": "open-rights-exchange-server-example",
   "version": "1.0.0",
-  "description": "Example api using @apimarket/apimarket-server library",
+  "description": "Example API server using ORE Protocol server library",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "author": "AIKON",
+  "author": "Open Rights Exchange",
   "license": "MIT",
   "dependencies": {
-    "@apimarket/apimarket-server": "^1.0.0",
+    "@open-rights-exchange/server": "^1.0.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.1.0",
