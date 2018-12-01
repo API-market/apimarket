@@ -11,7 +11,6 @@ const {
   getTokenAmount
 } = require("./helpers.js")
 
-var URL = require('url').URL
 const {
   Orejs
 } = require('@open-rights-exchange/orejs')
@@ -296,7 +295,6 @@ class ApiMarketClient {
     const encryptedParams = encryptParams(params)
 
     var hash = require('object-hash');
-
 
     const cacheKeyParams = Object.assign({}, encryptedParams)
     cacheKeyParams["right"] = apiRight.right_name
