@@ -2,7 +2,7 @@
   "name": "@apimarket/apimarket",
   "version": "1.0.5",
   "engines": {
-    "node": ">=7.6.0"
+    "node": ">=10.0.0"
   },
   "description": "Client library for api.market",
   "main": "./dist/index.js",
