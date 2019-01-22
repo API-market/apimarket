@@ -1,3 +1,3 @@
 # About
 
-This repository contains client and server libraries for interacting with the api.market marketplace.
+This repository contains the contracts required by the api.market marketplace.

@@ -88,8 +88,8 @@ void apiregistry::publishapi(name creator, name issuer, string api_voucher_licen
     vector<ore_types::url_params> all_params;
 
     // Reach to the rights table and check if theres a right that has the same right name
-    rights_registry rights_contract = rights_registry(_self,_code,_ds);
-    instrument instr_contract = instrument(_self,_code,_ds);
+    rights_registry rights_contract = rights_registry("righs.ore"_n, "rights.ore"_n, _ds);
+    instrument instr_contract = instrument("instr.ore"_n,"instr.ore"_n,_ds);
 
     vector<ore_types::right> rights;
 
@@ -135,7 +135,6 @@ void apiregistry::publishapi(name creator, name issuer, string api_voucher_licen
     {
         //check if the api is already registered or not
         rights_registry::right_reg rightresult = rights_contract.find_right_by_name(right_params[i].right_name);
-
         rights.push_back({right_params[i].right_name, right_params[i].right_description, right_params[i].right_price_in_cpu, all_params[i].url_params});
     }
 
@@ -167,6 +166,7 @@ void apiregistry::publishapi(name creator, name issuer, string api_voucher_licen
     }
     else
     {
+        print("\nminting offer instrument\n");
 
         mint_instrument.actions.emplace_back(
             eosio::permission_level{creator, "active"_n}, INSTRUMENT_CONTRACT_NAME, "mint"_n,
@@ -219,7 +219,7 @@ void apiregistry::licenseapi(name creator, name buyer, uint64_t offer_id, string
     // TODO: pass the parameter_rules as additional_url_params in the offer
     require_auth(creator);
 
-    instrument instrument_val = instrument(_self,_code,_ds);
+    instrument instrument_val = instrument("instr.ore"_n,"instr.ore"_n,_ds);
     instrument::token offer;
 
     uint64_t start_time;
